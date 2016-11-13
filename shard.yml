@@ -1,0 +1,10 @@
+name: sdl
+version: 0.1.0
+
+authors:
+  - Julien Portalier <julien@portalier.com>
+
+description: |
+  Simple DirectMedia Layer bindings (SDL 1.2)
+
+license: MIT
