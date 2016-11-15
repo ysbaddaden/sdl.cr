@@ -1,233 +1,174 @@
+require "./pixels"
+require "./rect"
+require "./surface"
+
 lib LibSDL
-  ALPHA_OPAQUE = 255
-  ALPHA_TRANSPARENT = 0
-
-  struct Rect
-    x : Int16
-    y : Int16
-    w : UInt16
-    h : UInt16
-  end
-
-  struct Color
-    r : UInt8
-    g : UInt8
-    b : UInt8
-    unused : UInt8
-  end
-
-  struct Palette
-    ncolors : Int
-    colors : Color*
-  end
-
-  struct PixelFormat
-    palette : Palette*
-    bits_per_pixel : UInt8
-    bytes_per_pixel : UInt8
-
-    r_loss : UInt8
-    g_loss : UInt8
-    b_loss : UInt8
-    a_loss : UInt8
-
-    r_shift : UInt8
-    g_shift : UInt8
-    b_shift : UInt8
-    a_shift : UInt8
-
-    r_mask : UInt32
-    g_mask : UInt32
-    b_mask : UInt32
-    a_mask : UInt32
-
-    colorkey : UInt32
-    alpha : UInt8
-  end
-
-  struct Surface
-    flags : UInt32
-    format : PixelFormat*
-    w : Int
-    h : Int
-    pitch : UInt16
-    pixels : Void*
-    __offset : Int
-    __private_hwdata : Void*
-    clip_rect : Rect
-    __unused1 : UInt32
-    __locked : UInt32
-    __map : Void*
-    __format_version : UInt
-    refcount : Int
-  end
-
-  # available for SDL_CreateRGBSurface or SDL_SetVideoMode
-
-  SWSURFACE = 0x00000000
-  HWSURFACE = 0x00000001
-  ASYNCBLIT = 0x00000004
-
-  # available for SDL_SetVideoMode
-
-  ANYFORMAT  = 0x10000000
-  HWPALETTE  = 0x20000000
-  DOUBLEBUF  = 0x40000000
-  FULLSCREEN = 0x80000000
-  OPENGL     = 0x00000002
-  OPENGLBLIT = 0x0000000A
-  RESIZABLE  = 0x00000010
-  NOFRAME    = 0x00000020
-
-  # used internally (read-only)
-
-  HWACCEL     = 0x00000100
-  SRCCOLORKEY = 0x00001000
-  RLEACCELOK  = 0x00002000
-  RLEACCEL    = 0x00004000
-  SRCALPHA    = 0x00010000
-  PREALLOC    = 0x01000000
-
-  struct VideoInfo
-    flags : UInt32
-	#hw_available : UInt32 :1
-	#wm_available : UInt32 :1
-	#__unused_bits1 : UInt32 :6
-	#__unused_bits2 : UInt32 :1
-	#blit_hw : UInt32 :1
-	#blit_hw_CC : UInt32 :1
-	#blit_hw_A : UInt32 :1
-	#blit_sw : UInt32 :1
-	#blit_sw_CC : UInt32 :1
-	#blit_sw_A : UInt32 :1
-	#blit_fill : UInt32 :1
-	#__unused_bits3 : UInt32 :16
-	video_mem : UInt32
-	vfmt : PixelFormat*
-	current_w : Int
-	current_h : Int
-  end
-
-  # overlay
-  YV12_OVERLAY = 0x32315659
-  IYUV_OVERLAY = 0x56555949
-  YUY2_OVERLAY = 0x32595559
-  UYVY_OVERLAY = 0x59565955
-  YVYU_OVERLAY = 0x55595659
-
-  struct Overlay
+  struct DisplayMode
     format : UInt32
     w : Int
     h : Int
-    planes : Int
-    pitches : UInt16*
-    pixels : UInt8**
-	hwfuncs : Void*
-	hwdata : Void*
-	hw_overlay : UInt32 # :1
-	#UnusedBits : UInt32 # :31
+    refresh_rate : Int
+    driverdata : Void*
   end
+
+  type Window = Void
+
+  enum WindowFlags : UInt32
+    FULLSCREEN = 0x00000001
+    OPENGL = 0x00000002
+    SHOWN = 0x00000004
+    HIDDEN = 0x00000008
+    BORDERLESS = 0x00000010
+    RESIZABLE = 0x00000020
+    MINIMIZED = 0x00000040
+    MAXIMIZED = 0x00000080
+    INPUT_GRABBED = 0x00000100
+    INPUT_FOCUS = 0x00000200
+    MOUSE_FOCUS = 0x00000400
+    FULLSCREEN_DESKTOP = 0x00001001 # WINDOW_FULLSCREEN | 0x00001000
+    FOREIGN = 0x00000800
+    ALLOW_HIGHDPI = 0x00002000
+  end
+
+  enum WindowPosition
+    UNDEFINED = 0x1FFF0000
+    CENTERED  = 0x2FFF0000
+  end
+
+  enum WindowEventID
+    NONE
+    SHOWN
+    HIDDEN
+    EXPOSED
+    MOVED
+    RESIZED
+    SIZE_CHANGED
+    MINIMIZED
+    MAXIMIZED
+    RESTORED
+    ENTER
+    LEAVE
+    FOCUS_GAINED
+    FOCUS_LOST
+    CLOSE
+  end
+
+  type GLContext = Void*
 
   enum GLattr
-    RED_SIZE
-    GREEN_SIZE
-    BLUE_SIZE
-    ALPHA_SIZE
-    BUFFER_SIZE
-    DOUBLEBUFFER
-    DEPTH_SIZE
-    STENCIL_SIZE
-    ACCUM_RED_SIZE
-    ACCUM_GREEN_SIZE
-    ACCUM_BLUE_SIZE
-    ACCUM_ALPHA_SIZE
-    STEREO
-    MULTISAMPLEBUFFERS
-    MULTISAMPLESAMPLES
-    ACCELERATED_VISUAL
-    SWAP_CONTROL
+    SDL_GL_RED_SIZE
+    SDL_GL_GREEN_SIZE
+    SDL_GL_BLUE_SIZE
+    SDL_GL_ALPHA_SIZE
+    SDL_GL_BUFFER_SIZE
+    SDL_GL_DOUBLEBUFFER
+    SDL_GL_DEPTH_SIZE
+    SDL_GL_STENCIL_SIZE
+    SDL_GL_ACCUM_RED_SIZE
+    SDL_GL_ACCUM_GREEN_SIZE
+    SDL_GL_ACCUM_BLUE_SIZE
+    SDL_GL_ACCUM_ALPHA_SIZE
+    SDL_GL_STEREO
+    SDL_GL_MULTISAMPLEBUFFERS
+    SDL_GL_MULTISAMPLESAMPLES
+    SDL_GL_ACCELERATED_VISUAL
+    SDL_GL_RETAINED_BACKING
+    SDL_GL_CONTEXT_MAJOR_VERSION
+    SDL_GL_CONTEXT_MINOR_VERSION
+    SDL_GL_CONTEXT_EGL
+    SDL_GL_CONTEXT_FLAGS
+    SDL_GL_CONTEXT_PROFILE_MASK
+    SDL_GL_SHARE_WITH_CURRENT_CONTEXT
+    SDL_GL_FRAMEBUFFER_SRGB_CAPABLE
   end
 
-  LOGPAL = 0x01
-  PHYSPAL = 0x02
+  enum GLprofile
+    PROFILE_CORE           = 0x0001
+    PROFILE_COMPATIBILITY  = 0x0002
+    PROFILE_ES             = 0x0004
+  end
 
-  fun video_init = SDL_VideoInit(driver_name : Char*, flags: UInt32) : Int
+  enum GLcontextFlag
+    DEBUG_FLAG              = 0x0001
+    FORWARD_COMPATIBLE_FLAG = 0x0002
+    ROBUST_ACCESS_FLAG      = 0x0004
+    RESET_ISOLATION_FLAG    = 0x0008
+  end
+
+  fun get_num_video_drivers = SDL_GetNumVideoDrivers() : Int
+  fun get_video_driver = SDL_GetVideoDriver(index : Int) : Char*
+  fun video_init = SDL_VideoInit(driver_name : Char*) : Int
   fun video_quit = SDL_VideoQuit()
-  fun video_driver_name = SDL_VideoDriverName(namebuf : Char*, maxlen : Int)
-  fun get_video_surface = SDL_GetVideoSurface() : Surface*
-  fun get_video_info = SDL_GetVideoInfo() : VideoInfo*
-  fun video_mode_ok = SDL_VideoModeOK(width : Int, height : Int, bpp : Int, flags : UInt32) : Int
-  fun list_modes = SDL_ListModes(format : PixelFormat*, flags : UInt32) : Rect**
-  fun set_video_mode = SDL_SetVideoMode(width : Int, height : Int, bpp : Int, flags : UInt32) : Surface*
+  fun get_current_video_driver = SDL_GetCurrentVideoDriver() : Char*
+  fun get_num_video_displays = SDL_GetNumVideoDisplays() : Int
+  fun get_display_name = SDL_GetDisplayName(displayIndex : Int) : Char*
+  fun get_display_bounds = SDL_GetDisplayBounds(displayIndex : Int, rect : Rect*) : Int
+  fun get_num_display_modes = SDL_GetNumDisplayModes(displayIndex : Int) : Int
+  fun get_display_mode = SDL_GetDisplayMode(displayIndex : Int, modeIndex : Int, mode : DisplayMode*) : Int
+  fun get_desktop_display_mode = SDL_GetDesktopDisplayMode(displayIndex : Int, mode : DisplayMode*) : Int
+  fun get_current_display_mode = SDL_GetCurrentDisplayMode(displayIndex : Int, mode : DisplayMode*) : Int
+  fun get_closest_display_mode = SDL_GetClosestDisplayMode(displayIndex : Int, mode : DisplayMode*, closest : DisplayMode*) : DisplayMode*
+  fun get_window_display_index = SDL_GetWindowDisplayIndex(window : Window*) : Int
+  fun set_window_display_mode = SDL_SetWindowDisplayMode(window : Window*, mode : DisplayMode*) : Int
+  fun get_window_display_mode = SDL_GetWindowDisplayMode(window : Window*, mode : DisplayMode*) : Int
+  fun get_window_pixel_mode = SDL_GetWindowPixelFormat(window : Window*) : UInt32
 
-  fun update_rects(screen : Surface*, numrects : Int, rects : Rect*)
-  fun update_rect(screen : Surface*, x : Int32, y : Int32, w : UInt32, h : UInt32)
-  fun flip = SDL_Flip(screen : Surface*) : Int
+  fun create_window = SDL_CreateWindow(title : Char*, x : Int, y : Int, w : Int, h : Int, flags : UInt32) : Window*
+  fun create_window_from = SDL_CreateWindowFrom(data : Void*) : Window*
+  fun get_window_id = SDL_GetWindowID(window : Window*) : UInt32
+  fun get_window_from_id = SDL_GetWindowFromID(id : UInt32) : Window*
+  fun get_window_flags = SDL_GetWindowFlags(window : Window*) : UInt32
+  fun set_window_title = SDL_SetWindowTitle(window : Window*, title : Char*)
+  fun get_window_title = SDL_GetWindowTitle(window : Window*) : Char*
+  fun set_window_icon = SDL_SetWindowIcon(window : Window*, icon : Surface*)
+  fun set_window_data = SDL_SetWindowData(window : Window*, name : Char*, userdata : Void*) : Void*
+  fun get_window_data = SDL_GetWindowData(window : Window*, name : Char*) : Void*
+  fun set_window_position = SDL_SetWindowPosition(window : Window*, x : Int, y : Int)
+  fun get_window_position = SDL_GetWindowPosition(window : Window*, x : Int*, y : Int*)
+  fun set_window_size = SDL_SetWindowSize(window : Window*, w : Int, h : Int)
+  fun get_window_size = SDL_GetWindowSize(window : Window*, w : Int*, h : Int*)
+  fun set_window_minimum_size = SDL_SetWindowMinimumSize(window : Window*, min_w : Int, min_h : Int)
+  fun get_window_minimum_size = SDL_GetWindowMinimumSize(window : Window*, w : Int*, h : Int*)
+  fun set_window_maximum_size = SDL_SetWindowMaximumSize(window : Window*, max_w : Int, max_h : Int)
+  fun get_window_maximum_size = SDL_GetWindowMaximumSize(window : Window*, w : Int*, h : Int*)
+  fun set_window_bordered = SDL_SetWindowBordered(window : Window*, bordered : Bool)
+  fun show_window = SDL_ShowWindow(window : Window*)
+  fun hide_window = SDL_HideWindow(window : Window*)
+  fun raise_window = SDL_RaiseWindow(window : Window*)
+  fun maximize_window = SDL_MaximizeWindow(window : Window*)
+  fun minimize_window = SDL_MinimizeWindow(window : Window*)
+  fun restore_window = SDL_RestoreWindow(window : Window*)
+  fun set_window_fullscreen = SDL_SetWindowFullscreen(window : Window*, flags : UInt32) : Int
+  fun get_window_surface = SDL_GetWindowSurface(window : Window*) : Surface*
+  fun update_window_surface = SDL_UpdateWindowSurface(window : Window*) : Int
+  fun update_window_surface_rects = SDL_UpdateWindowSurfaceRects(window : Window*, rects : Rect*, numrects : Int) : Int
+  fun set_window_grab = SDL_SetWindowGrab(window : Window*, grabbed : Bool)
+  fun get_window_grab = SDL_GetWindowGrab(window : Window*) : Bool
+  fun set_window_brightness = SDL_SetWindowBrightness(window : Window*, brightness : Float) : Int
+  fun get_window_brightness = SDL_GetWindowBrightness(window : Window*) : Float
+  fun set_window_gamma_ramp = SDL_SetWindowGammaRamp(window : Window*, red : UInt16*, green : UInt16*, blue : UInt16*) : Int
+  fun get_window_gamma_ramp = SDL_GetWindowGammaRamp(window : Window*, red : UInt16*, green : UInt16*, blue : UInt16*) : Int
+  fun destroy_window = SDL_DestroyWindow(window : Window*)
+  fun is_screen_saver_enabled = SDL_IsScreenSaverEnabled() : Bool
+  fun enable_screen_saver = SDL_EnableScreenSaver()
+  fun disable_screen_saver = SDL_DisableScreenSaver()
 
-  fun set_gamma = SDL_SetGamma(red : Float, green : Float, blue : Float);
-  fun set_gamma_ramp = SDL_SetGammaRamp(red : UInt16*, green : UInt16*, blue : UInt16*)
-  fun get_gamme_ramp = SDL_GetGammaRamp(red : UInt16*, green : UInt16*, blue : UInt16*)
-  fun set_colors = SDL_SetColors(surface : Surface*, colors : Color*, firstcolor : Int, ncolors : Int);
-  fun set_palette = SDL_SetPalette(surface : Surface*, flags : Int, colors : Color*, firstcolor : Int, ncolors : Int)
-  fun map_rgb = SDL_MapRGB(format : PixelFormat*, r : UInt8, g : UInt8, b : UInt8, a : UInt8 ) : UInt32
-  fun map_rgba = SDL_MapRGBA(format : PixelFormat*, r : UInt8, g : UInt8, b : UInt8, a : UInt8 ) : UInt32
-  fun get_rgb = SDL_GetRGB(pixel : UInt32, fmt : PixelFormat*, r : UInt8*, g : UInt8*, b : UInt8*)
-  fun get_rgba = SDL_GetRGBA(pixel : UInt32, fmt : PixelFormat*, r : UInt8*, g : UInt8*, b : UInt8*, a : UInt8 *)
-
-  fun create_rgb_surface = SDL_CreateRGBSurface(flags : UInt32, width : Int, height : Int, depth : Int, r_mask : UInt32, g_mask : UInt32, b_mask : UInt32, a_mask : UInt32) : Surface*
-  fun create_rgb_surface_from = SDL_CreateRGBSurfaceFrom(pixels : Void*, flags : UInt32, width : Int, height : Int, depth : Int, r_mask : UInt32, g_mask : UInt32, b_mask : UInt32, a_mask : UInt32) : Surface*
-  fun free_surface = SDL_FreeSurface(surface : Surface*)
-  fun lock_surface = SDL_LockSurface(surface : Surface*) : Int
-  fun unlock_surface = SDL_UnlockSurface(surface : Surface*)
-
-  fun load_bmp_rw = SDL_LoadBMP_RW(src : RWops*, freesrc : Int) : Surface*
-  fun save_bmp_rw = SDL_SaveBMP_RW (surface : Surface*, dst : RWops*, freedst : Int) : Int
-
-  fun set_color_key = SDL_SetColorKey(surface : Surface*, flag : UInt32, key : UInt32) : Int
-  fun set_alpha = SDL_SetAlpha(surface : Surface*, flag : UInt32, alpha : UInt8) : Int
-  fun set_clip_rect = SDL_SetClipRect(surface : Surface *, rect : Rect*) : Int # SDL_bool
-  fun get_clip_rect = SDL_GetClipRect(surface : Surface *, rect : Rect*)
-  fun convert_surface = SDL_ConvertSurface(src : Surface*, fmt : PixelFormat*, flags : UInt32) : Surface*
-  fun upper_blit = SDL_UpperBlit(src : Surface*, srcrect : Rect*, dst : Surface*, dstrect : Rect*) : Int
-  fun lower_blit = SDL_LowerBlit(src : Surface*, srcrect : Rect*, dst : Surface*, dstrect : Rect*) : Int
-  fun fill_rect = SDL_FillRect(dst : Surface*, dstrect : Rect*, color : UInt32) : Int
-  fun display_format = SDL_DisplayFormat(surface : Surface*) : Surface*
-  fun display_format_alpha = SDL_DisplayFormatAlpha(surface : Surface*) : Surface*
-
-  # overlay
-
-  fun create_yuv_overlay = SDL_CreateYUVOverlay(width : Int, height : Int, format : UInt32, display : Surface*) : Overlay*
-  fun lock_yuv_overlay = SDL_LockYUVOverlay(overlay : Overlay*) : Int
-  fun unlock_yuv_overlay = SDL_UnlockYUVOverlay(overlay : Overlay*)
-  fun display_yuv_overlay = SDL_DisplayYUVOverlay(overlay : Overlay*, dstrect : Rect*) : Int
-  fun free_yuv_overlay = SDL_FreeYUVOverlay(overlay : Overlay*)
-
-  # OpenGL support function
+  # OpenGL support functions
 
   fun gl_load_library = SDL_GL_LoadLibrary(path : Char*) : Int
   fun gl_get_proc_address = SDL_GL_GetProcAddress(proc : Char*) : Void*
-  fun gl_get_attribute = SDL_GL_GetAttribute(attr : GLattr, value : Int*) : Int
+  fun gl_unload_library = SDL_GL_UnloadLibrary()
+  fun gl_extension_supported = SDL_GL_ExtensionSupported(extension : Char*) : Bool
+  fun gl_reset_attributes = SDL_GL_ResetAttributes()
   fun gl_set_attribute = SDL_GL_SetAttribute(attr : GLattr, value : Int) : Int
-  fun gl_swap_buffers = SDL_GL_SwapBuffers()
-  fun gl_update_rects = SDL_GL_UpdateRects(numrects : Int, rects : Rect*)
-  fun gl_lock = SDL_GL_Lock()
-  fun gl_unlock = SDL_GL_Unlock()
-
-  # Window Manager
-
-  fun wm_set_caption = SDL_WM_SetCaption(title : Char*, icon : Char*)
-  fun wm_get_caption = SDL_WM_GetCaption(title : Char**, icon : Char**)
-  fun wm_set_icon = SDL_WM_SetIcon(icon : Surface*, mask : UInt8)
-  fun wm_iconify_window = SDL_WM_IconifyWindow()
-  fun wm_toggle_full_screen = SDL_WM_ToggleFullScreen(surface : Surface*)
-
-  enum GrabMode
-	QUERY = -1
-	OFF = 0
-	ON = 1
-	FULLSCREEN # used internally
-  end
-  fun wm_grab_input = SDL_WM_GrabInput(mode : GrabMode) : GrabMode
-
-  fun soft_stretch = SDL_SoftStretch(src : Surface*, srcrect : Rect*, dst : Surface*, dstrect : Rect*) : Int
+  fun gl_get_attribute = SDL_GL_GetAttribute(attr : GLattr, value : Int*) : Int
+  fun gl_create_context = SDL_GL_CreateContext(window : Window*) : GLContext
+  fun gl_make_current = SDL_GL_MakeCurrent(window : Window*, context : GLContext) : Int
+  fun gl_get_current_window = SDL_GL_GetCurrentWindow() : Window*
+  fun gl_get_current_context = SDL_GL_GetCurrentContext() : GLContext
+  fun gl_get_drawable_size = SDL_GL_GetDrawableSize(window : Window*, w : Int*, h : Int*) : Int
+  fun gl_set_swap_interval = SDL_GL_SetSwapInterval(interval : Int) : Int
+  fun gl_get_swap_interval = SDL_GL_GetSwapInterval() : Int
+  fun gl_swap_window = SDL_GL_SwapWindow(window : Window*)
+  fun gl_delete_context = SDL_GL_DeleteContext(context : GLContext)
 end

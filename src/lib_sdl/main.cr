@@ -1,13 +1,16 @@
-@[Link("SDL")]
 lib LibSDL
-  {% if flag?(:darwin) %}
-    # should be called from main()
-    fun init_quick_draw = SDL_InitQuickDraw(the_qd : Void*)
-  {% elsif flag?(:windows) %}
-    # should be called from WinMain()
-    fun set_module_handle = SDL_SetModuleHandle(hInst : Void*)
-  {% else %}
-    # may replace main()
-    fun main = SDL_main(argc : Int, argv : Char**) : Int
+  fun main = SDL_main(argc : Int, argv : Char**) : Int
+
+  {% if flag?(:android) || flag?(:ios) %}
+    redefine_main(SDL_main) do |main|
+      \{{main}}
+    end
+  {% end %}
+
+  fun set_main_ready = SDL_SetMainReady()
+
+  {% if flag?(:windows) %}
+    fun SDL_RegisterApp(name : Char*, style : UInt32, hInst : Void*) : Int
+    fun SDL_UnregisterApp()
   {% end %}
 end

@@ -12,12 +12,12 @@ module SDL
       end
     end
 
-    struct Active < Event
-      @event : LibSDL::ActiveEvent
-      delegate state, to: @event
+    struct Window < Event
+      @event : LibSDL::WindowEvent
+      delegate event, data1, data2, to: @event
 
-      def gain?
-        @event.gain == 1
+      def window_id
+        @event.windowID
       end
     end
 
@@ -25,7 +25,11 @@ module SDL
       include PressRelease
 
       @event : LibSDL::KeyboardEvent
-      delegate which, keysym, to: @event
+      delegate repeat, keysym, to: @event
+
+      def window_id
+        @event.windowID
+      end
 
       def keyup?
         type.keyup?
@@ -44,26 +48,32 @@ module SDL
       end
     end
 
+    struct TextEditing < Event
+      @event : LibSDL::TextEditingEvent
+      delegate text, start, length, to: @event
+
+      def window_id
+        @event.windowID
+      end
+    end
+
+    struct TextInput < Event
+      @event : LibSDL::TextInputEvent
+      delegate text, to: @event
+
+      def window_id
+        @event.windowID
+      end
+    end
+
     struct MouseMotion < Event
       include PressRelease
 
       @event : LibSDL::MouseMotionEvent
-      delegate which, to: @event
+      delegate which, x, y, xrel, yrel, to: @event
 
-      def x
-        @event.x.to_i
-      end
-
-      def y
-        @event.y.to_i
-      end
-
-      def xrel
-        @event.xrel.to_i
-      end
-
-      def yrel
-        @event.yrel.to_i
+      def window_id
+        @event.windowID
       end
     end
 
@@ -71,28 +81,25 @@ module SDL
       include PressRelease
 
       @event : LibSDL::MouseButtonEvent
-      delegate which, button, to: @event
+      delegate which, button, clicks, x, y, to: @event
 
-      def x
-        @event.x.to_i
+      def window_id
+        @event.windowID
       end
+    end
 
-      def y
-        @event.y.to_i
+    struct MouseWheel < Event
+      @event : LibSDL::MouseWheelEvent
+      delegate which, x, y, to: @event
+
+      def window_id
+        @event.windowID
       end
     end
 
     struct JoyAxis < Event
       @event : LibSDL::JoyAxisEvent
-      delegate which, ball, to: @event
-
-      def xrel
-        @event.xrel.to_i
-      end
-
-      def yrel
-        @event.yrel.to_i
-      end
+      delegate which, x, y, to: @event
     end
 
     struct JoyBall < Event
@@ -110,7 +117,7 @@ module SDL
 
     struct JoyHat < Event
       @event : LibSDL::JoyHatEvent
-      delegate which, ball, hat, value, to: @event
+      delegate which, hat, value, to: @event
     end
 
     struct JoyButton < Event
@@ -120,20 +127,89 @@ module SDL
       delegate which, button, to: @event
     end
 
-    struct Resize < Event
-      @event : LibSDL::ResizeEvent
+    struct JoyDevice < Event
+      @event : LibSDL::JoyDeviceEvent
+      delegate which, to: @event
+    end
 
-      def width
-        @event.w
+    struct ControllerAxis < Event
+      @event : LibSDL::ControllerAxisEvent
+      delegate which, axis, value, to: @event
+    end
+
+    struct ControllerButton < Event
+      include PressRelease
+
+      @event : LibSDL::ControllerButtonEvent
+      delegate which, button, to: @event
+    end
+
+    struct ControllerDevice < Event
+      @event : LibSDL::ControllerDeviceEvent
+      delegate which, to: @event
+    end
+
+    struct TouchFinger < Event
+      @event : LibSDL::TouchFingerEvent
+      delegate x, y, dx, dy, pressure, to: @event
+
+      def touch_id
+        @event.touchId
       end
 
-      def height
-        @event.h
+      def touch_id
+        @event.fingerId
       end
     end
 
-    struct Expose < Event
-      @event : LibSDL::ExposeEvent
+    struct DollarGesture < Event
+      @event : LibSDL::DollarGestureEvent
+      delegate error, x, y, to: @event
+
+      def touch_id
+        @event.touchId
+      end
+
+      def gesture_id
+        @event.gestureId
+      end
+
+      def num_fingers
+        @event.numFingers
+      end
+    end
+
+    struct MultiGesture < Event
+      @event : LibSDL::MultiGestureEvent
+      delegate x, y, to: @event
+
+      def touch_id
+        @event.touchId
+      end
+
+      def d_theta
+        @event.dTheta
+      end
+
+      def d_dist
+        @event.dDist
+      end
+
+      def num_fingers
+        @event.numFingers
+      end
+    end
+
+    struct Drop < Event
+      @event : LibSDL::DropEvent
+
+      #def finalize
+      #  LibSDL.free(@event.file)
+      #end
+
+      def filename
+        String.new(@event.file)
+      end
     end
 
     struct Quit < Event
@@ -143,6 +219,10 @@ module SDL
     struct User < Event
       @event : LibSDL::UserEvent
       delegate code, data1, data2, to: @event
+
+      def window_id
+        @event.windowID
+      end
 
       def push
         ret = LibSDL.push_event(self)
@@ -155,30 +235,42 @@ module SDL
       delegate msg, to: @event
     end
 
+    # Ignores an event type. They will no longer be pushed to the queue event.
     def self.ignore(type : Type) : Nil
       LibSDL.event_state(type, LibSDL::EventState::IGNORE)
     end
 
+    # Returns true if an event type is ignored.
     def self.ignored?(type : Type)
       LibSDL.event_state(type, LibSDL::EventState::QUERY) == LibSDL::EventState::IGNORE
     end
 
+    # Enables an event type. They will be pushed to the event queue.
     def self.enable(type : Type) : Nil
       LibSDL.event_state(type, LibSDL::EventState::ENABLE)
     end
 
+    # Returns true if an event type is enabled.
     def self.enabled?(type : Type) : Nil
       LibSDL.event_state(type, LibSDL::EventState::QUERY) == LibSDL::EventState::ENABLE
     end
 
-    def self.wait
-      if LibSDL.wait_event(out event) == 1
-        from(event)
+    # Tries to pull an event from the event queue; blocks until an event is added
+    # to the queue, indefinitely, or for a given timeout.
+    def self.wait(timeout = nil)
+      event = uninitialized LibSDL::Event
+      if timeout
+        ret = LibSDL.wait_event_timeout(pointerof(event), timeout)
+        raise Error.new("SDL_WaitEventTimeout") unless ret == 1
       else
-        raise Error.new("SDL_WaitEvent")
+        ret = LibSDL.wait_event(pointerof(event))
+        raise Error.new("SDL_WaitEvent") unless ret == 1
       end
+      from(event)
     end
 
+    # Tries to pull an event from the event queue; returns nil immediately if the
+    # queue is empty.
     def self.poll
       case LibSDL.poll_event(out event)
       when 1 then
@@ -190,14 +282,23 @@ module SDL
 
     protected def self.from(event : LibSDL::Event)
       case event.type
-      when .active_event?
-        Active.new(event.active)
+      when .window_event?
+        Window.new(event.window)
+
       when .keydown?, .keyup?
         Keyboard.new(event.key)
+      when .text_editing?
+        TextEditing.new(event.edit)
+      when .text_input?
+        TextInput.new(event.text)
+
       when .mouse_motion?
         MouseMotion.new(event.motion)
       when .mouse_button_down?, .mouse_button_up?
         MouseButton.new(event.button)
+      when .mouse_wheel?
+        MouseWheel.new(event.wheel)
+
       when .joy_axis_motion?
         JoyAxis.new(event.jaxis)
       when .joy_ball_motion?
@@ -206,10 +307,26 @@ module SDL
         JoyHat.new(event.jhat)
       when .joy_button_down?, .joy_button_up?
         JoyButton.new(event.jbutton)
-      when .video_resize?
-        Resize.new(event.resize)
-      when .video_expose?
-        Expose.new(event.expose)
+      when .joy_device_added?, .joy_device_removed?
+        JoyDevice.new(event.jdevice)
+
+      when .controller_axis_motion?
+        ControllerAxis.new(event.caxis)
+      when .controller_button_down?, .controller_button_up?
+        ControllerButton.new(event.cbutton)
+      when .controller_device_added?, .controller_device_removed?, .controller_device_remapped?
+        ControllerDevice.new(event.cdevice)
+
+      when .finger_down?, .finger_up?, .finger_motion?
+        TouchFinger.new(event.tfinger)
+      when .dollar_gesture?, .dollar_record?
+        DollarGesture.new(event.dgesture)
+      when .multi_gesture?
+        MultiGesture.new(event.mgesture)
+
+      when .drop_file?
+        Drop.new(event.drop)
+
       when .quit?
         Quit.new(event.quit)
       when .sys_wm_event?
@@ -224,6 +341,10 @@ module SDL
 
     def type
       @event.type
+    end
+
+    def timestamp
+      @event.timestamp
     end
 
     # :nodoc:

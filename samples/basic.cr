@@ -1,22 +1,22 @@
 require "../sdl"
 
 SDL.init(SDL::Init::VIDEO)
+at_exit { SDL.quit }
 
-screen = SDL::Screen.new(640, 480, 32, SDL::Flags::HWSURFACE)
-screen.flip
+window = SDL::Window.new("SDL tutorial", 640, 480)
 
 loop do
   event = SDL::Event.wait
-  p event
 
   case event
   when SDL::Event::Quit
     break
   when SDL::Event::Keyboard
-    if event.mod.ctrl? && event.sym.q?
+    if event.mod.lctrl? && event.sym.q?
       break
     end
   end
-end
 
-SDL.quit
+  window.surface.fill(255, 255, 255)
+  window.update
+end

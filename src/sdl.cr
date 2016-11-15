@@ -1,7 +1,7 @@
 require "./lib_sdl"
+require "./window"
 require "./events"
-require "./keyboard"
-require "./surface"
+#require "./surface"
 
 module SDL
   class Error < Exception
@@ -12,14 +12,15 @@ module SDL
 
   @[Flags]
   enum Init
-    TIMER       = LibSDL::INIT_TIMER
-    AUDIO       = LibSDL::INIT_AUDIO
-    VIDEO       = LibSDL::INIT_VIDEO
-    CDROM       = LibSDL::INIT_CDROM
-    JOYSTICK    = LibSDL::INIT_JOYSTICK
-    NOPARACHUTE = LibSDL::INIT_NOPARACHUTE
-    EVENTTHREAD = LibSDL::INIT_EVENTTHREAD
-    EVERYTHING  = LibSDL::INIT_EVERYTHING
+    TIMER          = LibSDL::INIT_TIMER
+    AUDIO          = LibSDL::INIT_AUDIO
+    VIDEO          = LibSDL::INIT_VIDEO
+    JOYSTICK       = LibSDL::INIT_JOYSTICK
+    HAPTIC         = LibSDL::INIT_HAPTIC
+    GAMECONTROLLER = LibSDL::INIT_GAMECONTROLLER
+    EVENTS         = LibSDL::INIT_EVENTS
+    NOPARACHUTE    = LibSDL::INIT_NOPARACHUTE
+    EVERYTHING     = LibSDL::INIT_EVERYTHING
   end
 
   def self.init(flags : Init)
