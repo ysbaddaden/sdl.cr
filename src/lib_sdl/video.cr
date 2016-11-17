@@ -117,7 +117,7 @@ lib LibSDL
   fun create_window_from = SDL_CreateWindowFrom(data : Void*) : Window*
   fun get_window_id = SDL_GetWindowID(window : Window*) : UInt32
   fun get_window_from_id = SDL_GetWindowFromID(id : UInt32) : Window*
-  fun get_window_flags = SDL_GetWindowFlags(window : Window*) : UInt32
+  fun get_window_flags = SDL_GetWindowFlags(window : Window*) : WindowFlags
   fun set_window_title = SDL_SetWindowTitle(window : Window*, title : Char*)
   fun get_window_title = SDL_GetWindowTitle(window : Window*) : Char*
   fun set_window_icon = SDL_SetWindowIcon(window : Window*, icon : Surface*)
@@ -149,6 +149,7 @@ lib LibSDL
   fun set_window_gamma_ramp = SDL_SetWindowGammaRamp(window : Window*, red : UInt16*, green : UInt16*, blue : UInt16*) : Int
   fun get_window_gamma_ramp = SDL_GetWindowGammaRamp(window : Window*, red : UInt16*, green : UInt16*, blue : UInt16*) : Int
   fun destroy_window = SDL_DestroyWindow(window : Window*)
+
   fun is_screen_saver_enabled = SDL_IsScreenSaverEnabled() : Bool
   fun enable_screen_saver = SDL_EnableScreenSaver()
   fun disable_screen_saver = SDL_DisableScreenSaver()

@@ -1,7 +1,9 @@
 require "./lib_sdl"
-require "./window"
 require "./events"
-#require "./surface"
+require "./hint"
+require "./renderer"
+require "./window"
+require "./screensaver"
 
 module SDL
   class Error < Exception

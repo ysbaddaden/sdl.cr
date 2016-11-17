@@ -12,7 +12,7 @@ lib LibSDL
 
   struct RendererInfo
     name : Char*
-    flags : UInt32
+    flags : RendererFlags
     num_texture_formats : UInt32
     texture_formats : UInt32[16]
     max_texture_width : Int
@@ -53,16 +53,16 @@ lib LibSDL
   fun query_texture = SDL_QueryTexture(texture : Texture*, format : UInt32*, access : Int*, w : Int*, h : Int*) : Int
   fun set_texture_color_mod = SDL_SetTextureColorMod(texture : Texture*, r : UInt8, g : UInt8, b : UInt8) : Int
   fun get_texture_color_mod = SDL_GetTextureColorMod(texture : Texture*, r : UInt8*, g : UInt8*, b : UInt8*) : Int
-  fun iset_texture_alpha_mod = SDL_SetTextureAlphaMod(texture : Texture*, alpha : UInt8) : Int
+  fun set_texture_alpha_mod = SDL_SetTextureAlphaMod(texture : Texture*, alpha : UInt8) : Int
   fun get_texture_alpha_mod = SDL_GetTextureAlphaMod(texture : Texture*, alpha : UInt8*) : Int
-  fun set_texture_blen_mode = SDL_SetTextureBlendMode(texture : Texture*, blendMode : BlendMode) : Int
-  fun get_texture_blen_mode = SDL_GetTextureBlendMode(texture : Texture*, blendMode : BlendMode*) : Int
+  fun set_texture_blend_mode = SDL_SetTextureBlendMode(texture : Texture*, blendMode : BlendMode) : Int
+  fun get_texture_blend_mode = SDL_GetTextureBlendMode(texture : Texture*, blendMode : BlendMode*) : Int
   fun update_texture = SDL_UpdateTexture(texture : Texture*, rect : Rect*, pixels : Void*, pitch : Int) : Int
   fun update_yuv_texture = SDL_UpdateYUVTexture(texture : Texture*, rect : Rect*, y_plane : UInt8*, y_pitch : Int, u_plane : UInt8*, u_pitch : Int, v_plane : UInt8*, v_pitch : Int) : Int
   fun lock_texture = SDL_LockTexture(texture : Texture*, rect : Rect*, pixels : Void**, pitch : Int*) : Int
   fun unlock_texture = SDL_UnlockTexture(texture : Texture*)
   fun render_target_supported = SDL_RenderTargetSupported(renderer : Renderer*) : Bool
-  fun set_render_targe = SDL_SetRenderTarget(renderer : Renderer*, texture : Texture*) : Int
+  fun set_render_target = SDL_SetRenderTarget(renderer : Renderer*, texture : Texture*) : Int
   fun get_render_target = SDL_GetRenderTarget(renderer : Renderer*) : Texture*
   fun render_set_logical_size = SDL_RenderSetLogicalSize(renderer : Renderer*, w : Int, h : Int) : Int
   fun render_get_logical_size = SDL_RenderGetLogicalSize(renderer : Renderer*, w : Int*, h : Int*)
@@ -72,10 +72,10 @@ lib LibSDL
   fun render_get_clip_rect = SDL_RenderGetClipRect(renderer : Renderer*, rect : Rect*)
   fun render_set_scale = SDL_RenderSetScale(renderer : Renderer*, scaleX : Float, scaleY : Float) : Int
   fun render_get_scale = SDL_RenderGetScale(renderer : Renderer*, scaleX : Float*, scaleY : Float*)
-  fun set_render_draw_colo = SDL_SetRenderDrawColor(renderer : Renderer*, r : UInt8, g : UInt8, b : UInt8, a : UInt8) : Int
+  fun set_render_draw_color = SDL_SetRenderDrawColor(renderer : Renderer*, r : UInt8, g : UInt8, b : UInt8, a : UInt8) : Int
   fun get_render_draw_color = SDL_GetRenderDrawColor(renderer : Renderer*, r : UInt8*, g : UInt8*, b : UInt8*, a : UInt8*) : Int
   fun set_render_draw_blend_mode = SDL_SetRenderDrawBlendMode(renderer : Renderer*, blendMode : BlendMode) : Int
-  fun get_render_draw_blend_mode = SDL_GetRenderDrawBlendMode(renderer : Renderer*, blendMode : BlendMode*)  : Int
+  fun get_render_draw_blend_mode = SDL_GetRenderDrawBlendMode(renderer : Renderer*, blendMode : BlendMode*) : Int
   fun render_clear = SDL_RenderClear(renderer : Renderer*) : Int
   fun render_draw_point = SDL_RenderDrawPoint(renderer : Renderer*, x : Int, y : Int) : Int
   fun render_draw_points = SDL_RenderDrawPoints(renderer : Renderer*, points : Point*, count : Int) : Int
@@ -91,6 +91,7 @@ lib LibSDL
   fun render_present = SDL_RenderPresent(renderer : Renderer*)
   fun destroy_texture = SDL_DestroyTexture(texture : Texture*)
   fun destroy_renderer = SDL_DestroyRenderer(renderer : Renderer*)
+
   fun gl_bind_texture = SDL_GL_BindTexture(texture : Texture*, texw : Float*, texh : Float*) : Int
   fun gl_unbind_texture = SDL_GL_UnbindTexture(texture : Texture*) : Int
 end

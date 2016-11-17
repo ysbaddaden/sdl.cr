@@ -52,18 +52,18 @@ module IMG
 
   # Loads the image from *path* using the optional *type* hint as a
   # `SDL::Texture` for *renderer*.
-  #def self.load(path, renderer : SDL::Renderer, type : Type? = nil)
-  #  SDL::RWops.open(path, "rb") do |rwops|
-  #   if type
-  #      texture = LibIMG.load_texture_typed_rw(renderer, rwops, 1, type.to_s)
-  #      raise Error.new("IMG_LoadTextureTyped_RW") unless texture
-  #    else
-  #      texture = LibIMG.load_texture_rw(renderer, rwops, 1)
-  #      raise Error.new("IMG_LoadTexture_RW") unless texture
-  #    end
-  #    SDL::Texture.new(texture)
-  #  end
-  #end
+  def self.load(path, renderer : SDL::Renderer, type : Type? = nil)
+    SDL::RWops.open(path, "rb") do |rwops|
+     if type
+        texture = LibIMG.load_texture_typed_rw(renderer, rwops, 1, type.to_s)
+        raise Error.new("IMG_LoadTextureTyped_RW") unless texture
+      else
+        texture = LibIMG.load_texture_rw(renderer, rwops, 1)
+        raise Error.new("IMG_LoadTexture_RW") unless texture
+      end
+      SDL::Texture.new(texture)
+    end
+  end
 
   {% for type in Type.constants %}
     # Loads the {{type.id}} image from *path* as a `SDL::Surface`.
@@ -96,11 +96,11 @@ module IMG
     end
 
     # Loads the file as a `SDL::Texture` for *renderer*.
-    #def load(renderer : SDL::Renderer)
-    #  texture = LibIMG.load_rw(renderer, @rwops, 1)
-    #  raise Error.new("IMG_Load_RW") unless texture
-    #  SDL::Texture.new(texture)
-    #end
+    def load(renderer : SDL::Renderer)
+      texture = LibIMG.load_texture_rw(renderer, @rwops, 1)
+      raise Error.new("IMG_LoadTexture_RW") unless texture
+      SDL::Texture.new(texture)
+    end
 
     {% for type in Type.constants %}
       # Returns true if the file is a {{type.id}} file.
