@@ -128,8 +128,10 @@ module SDL
 
     # Saves the Surface as a BMP image.
     def save_bmp(path)
-      if LibSDL.save_bmp_rw(self, RWops.new(path, "wb"), 1) != 0
-        raise Error.new("SDL_SaveBMP_RW")
+      RWops.open(path, "wb") do |rwops|
+        if LibSDL.save_bmp_rw(self, rwops, 1) != 0
+          raise Error.new("SDL_SaveBMP_RW")
+        end
       end
     end
 

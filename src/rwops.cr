@@ -1,34 +1,33 @@
 module SDL
   class RWops
-    @@rw_file = LibSDL.alloc_rw
-    @@rw_file.value.type = LibSDL::RWOPS_UNKNOWN
 
-    @@rw_file.value.size = ->(rwops : LibSDL::RWops*) {
-      io = Box(File).unbox(rwops.value.hidden.unknown.data1)
-      File.size(io.path).to_i64
+    @@rw_file = LibSDL.alloc_rw
+
+    @@rw_file.value.size = ->(context : LibSDL::RWops*) {
+      file = Box(RWops).unbox(context.value.hidden.unknown.data1).file
+      File.size(file.path).to_i64
     }
 
-    @@rw_file.value.seek = ->(rwops : LibSDL::RWops*, offset : Int64, whence : LibC::Int) {
+    @@rw_file.value.seek = ->(context : LibSDL::RWops*, offset : Int64, whence : LibC::Int) {
       wh = case whence
            when LibSDL::RW_SEEK_SET then IO::Seek::Set
            when LibSDL::RW_SEEK_CUR then IO::Seek::Current
            when LibSDL::RW_SEEK_END then IO::Seek::End
            else raise "can't seek: invalid whence value"
            end
-      io = Box(File).unbox(rwops.value.hidden.unknown.data1)
-      io.seek(offset.to_i32, wh)
-      io.tell.to_i64
+      file = Box(RWops).unbox(context.value.hidden.unknown.data1).file
+      file.seek(offset.to_i32, wh).tell.to_i64
     }
 
-    @@rw_file.value.read = ->(rwops : LibSDL::RWops*, ptr : Void*, size : LibC::SizeT, maxnum : LibC::SizeT) {
-      io = Box(File).unbox(rwops.value.hidden.unknown.data1)
+    @@rw_file.value.read = ->(context : LibSDL::RWops*, ptr : Void*, size : LibC::SizeT, maxnum : LibC::SizeT) {
+      file = Box(RWops).unbox(context.value.hidden.unknown.data1).file
       slice = ptr.as(UInt8*).to_slice(maxnum * size)
 
       begin
         # FIXME: may have read incomplete objects (seek back)!
         count = 0
         while slice.size > 0
-          count += read_bytes = io.read(slice)
+          count += read_bytes = file.read(slice)
           break if read_bytes == 0
           slice += read_bytes
         end
@@ -38,26 +37,25 @@ module SDL
       end
     }
 
-    @@rw_file.value.write = ->(rwops : LibSDL::RWops*, ptr : Void*, size : LibC::SizeT, num : LibC::SizeT) {
-      io = Box(File).unbox(rwops.value.hidden.unknown.data1)
+    @@rw_file.value.write = ->(context : LibSDL::RWops*, ptr : Void*, size : LibC::SizeT, num : LibC::SizeT) {
+      file = Box(RWops).unbox(context.value.hidden.unknown.data1).file
       slice = ptr.as(UInt8*).to_slice(num * size)
 
       begin
-        io.write(slice)
+        file.write(slice)
         num
       rescue ex
         LibC::SizeT.new(0)
       end
     }
 
-    @@rw_file.value.close = ->(rwops : LibSDL::RWops*) {
-      io = Box(File).unbox(rwops.value.hidden.unknown.data1)
-      io.close unless io.closed?
+    @@rw_file.value.close = ->(context : LibSDL::RWops*) {
+      Box(RWops).unbox(context.value.hidden.unknown.data1).close
       0
     }
 
-    def self.open(path, mode = "rb")
-      rwops = RWops.new(path, mode)
+    def self.open(path : String, mode = "rb")
+      rwops = new(path, mode)
       begin
         yield rwops
       ensure
@@ -65,40 +63,43 @@ module SDL
       end
     end
 
-    @io : File?
-    @rw : LibSDL::RWops*
-    @slice : Bytes?
+    @file : File
+    @context : LibSDL::RWops*
+    @freed = false
 
-    def initialize(path : String, mode = "rb")
-      @io = File.open(path, "rb")
-      @rw = @@rw_file.clone
-      @rw.value.hidden.unknown.data1 = Box.box(@io)
+    private def initialize(path : String, mode = "rb")
+      @file = File.open(path, "rb")
+      @context = LibSDL.alloc_rw
+      @context.value.size = @@rw_file.value.size
+      @context.value.seek = @@rw_file.value.seek
+      @context.value.read = @@rw_file.value.read
+      @context.value.write = @@rw_file.value.write
+      @context.value.close = @@rw_file.value.close
+      @context.value.type = LibSDL::RWOPS_UNKNOWN
+      @context.value.hidden.unknown.data1 = Box.box(self)
     end
 
-    def initialize(slice : Bytes, read_only = false)
-      @slice = slice
-      ptr = slice.to_unsafe.as(Void*)
-
-      if read_only
-        @rw = LibSDL.rw_from_const_mem(ptr, slice.bytesize)
-      else
-        @rw = LibSDL.rw_from_mem(ptr, slice.bytesize)
-      end
+    # :nodoc:
+    def file
+      @file
     end
 
     def finalize
       close
-      LibSDL.free_rw(@rw)
     end
 
     def close
-      if io = @io
-        io.close unless io.closed?
+      if file = @file
+        file.close unless file.closed?
+      end
+      unless @freed
+        @freed = true
+        LibSDL.free_rw(@context)
       end
     end
 
     def to_unsafe
-      @rw
+      @context
     end
   end
 end

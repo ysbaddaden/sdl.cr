@@ -83,30 +83,30 @@ module IMG
     end
   {% end %}
 
-  class File
-    def initialize(path)
-      @rwops = SDL::RWops.new(path, "rb")
-    end
+  #class File
+  #  def initialize(path)
+  #    @rwops = SDL::RWops.new(path, "rb")
+  #  end
 
-    # Loads the file as a `SDL::Surface`.
-    def load
-      surface = LibIMG.load_rw(@rwops, 1)
-      raise Error.new("IMG_Load_RW") unless surface
-      SDL::Surface.new(surface)
-    end
+  #  # Loads the file as a `SDL::Surface`.
+  #  def load
+  #    surface = LibIMG.load_rw(@rwops, 1)
+  #    raise Error.new("IMG_Load_RW") unless surface
+  #    SDL::Surface.new(surface)
+  #  end
 
-    # Loads the file as a `SDL::Texture` for *renderer*.
-    def load(renderer : SDL::Renderer)
-      texture = LibIMG.load_texture_rw(renderer, @rwops, 1)
-      raise Error.new("IMG_LoadTexture_RW") unless texture
-      SDL::Texture.new(texture)
-    end
+  #  # Loads the file as a `SDL::Texture` for *renderer*.
+  #  def load(renderer : SDL::Renderer)
+  #    texture = LibIMG.load_texture_rw(renderer, @rwops, 1)
+  #    raise Error.new("IMG_LoadTexture_RW") unless texture
+  #    SDL::Texture.new(texture)
+  #  end
 
-    {% for type in Type.constants %}
-      # Returns true if the file is a {{type.id}} file.
-      def {{type.downcase.id}}?
-        LibIMG.is_{{type.downcase.id}}(@rwops) == 1
-      end
-    {% end %}
-  end
+  #  {% for type in Type.constants %}
+  #    # Returns true if the file is a {{type.id}} file.
+  #    def {{type.downcase.id}}?
+  #      LibIMG.is_{{type.downcase.id}}(@rwops) == 1
+  #    end
+  #  {% end %}
+  #end
 end
