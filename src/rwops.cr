@@ -67,7 +67,7 @@ module SDL
     @context : LibSDL::RWops*
     @freed = false
 
-    private def initialize(path : String, mode = "rb")
+    protected def initialize(path : String, mode = "rb")
       @file = File.open(path, "rb")
       @context = LibSDL.alloc_rw
       @context.value.size = @@rw_file.value.size

@@ -20,6 +20,7 @@ module SDL
     end
 
     alias Flags = LibSDL::RendererFlags
+    alias Flip = LibSDL::RendererFlip
 
     def initialize(window : Window, flags : Flags = Flags::ACCELERATED)
       @renderer = LibSDL.create_renderer(window, -1, flags)
@@ -208,9 +209,31 @@ module SDL
       raise Error.new("SDL_RenderFillRects") unless ret == 0
     end
 
-    # Copy a texture to the renderer's target texture.
+    # Copy a texture to the renderer's target texture. Optionaly clip the
+    # texture, and place or resize it on the renderer. By default copies the
+    # whole texture resized to fill the whole renderer.
     def copy(texture, srcrect = nil, dstrect = nil)
       LibSDL.render_copy(self, texture, Rect.from(srcrect), Rect.from(dstrect))
+    end
+
+    # Copy a texture to the renderer's target texture, with extra rotation and
+    # flipping options.
+    def copy(texture, srcrect = nil, dstrect = nil, angle = 0, center = nil, flip : Flip = Flip::NONE)
+      LibSDL.render_copy_ex(self, texture, Rect.from(srcrect), Rect.from(dstrect), angle, Point.from(center), flip)
+    end
+
+    # Transforms a surface into a texture, then copies it to the renderer's
+    # target texture. Optionaly clip the texture, and place or resize it on the
+    # renderer. By default copies the whole texture resized to fill the whole
+    # renderer.
+    def copy(surface : Surface, srcrect = nil, dstrect = nil)
+      copy(Texture.from(surface, self), srcrect, dstrect)
+    end
+
+    # Transforms a surface into a texture, then copies it to the renderer's
+    # target texture, with extra rotation and flipping options.
+    def copy(surface : Surface, srcrect = nil, dstrect = nil, angle = 0, center = nil, flip : Flip = Flip::NONE)
+      copy(Texture.from(surface, self), srcrect, dstrect, angle, center, flip)
     end
 
     #def read_pixels
