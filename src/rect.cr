@@ -21,6 +21,10 @@ module SDL
       Point.new(pt.x, pt.y)
     end
 
+    def self.from(pt : Nil)
+      nil
+    end
+
     # OPTIMIZE: avoid copy
     def to_unsafe
       pt = GC.malloc(sizeof(LibSDL::Point)).as(LibSDL::Point*)
@@ -58,7 +62,7 @@ module SDL
 
     # OPTIMIZE: avoid copy
     def to_unsafe
-      rect = GC.malloc(sizeof(LibSDL::Rect)).as(LibSDL::Rect*)
+      rect = Pointer(LibSDL::Rect).malloc
       rect.value.x = x
       rect.value.y = y
       rect.value.w = w
