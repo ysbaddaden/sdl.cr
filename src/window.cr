@@ -17,7 +17,11 @@ module SDL
     end
 
     def surface
-      @surface ||= Surface.new(LibSDL.get_window_surface(self))
+      @surface ||= begin
+        surface = LibSDL.get_window_surface(self)
+        raise Error.new("SDL_GetWindowSurface")
+        Surface.new(surface)
+      end
     end
 
     def flags
