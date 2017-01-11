@@ -12,6 +12,7 @@ module IMG
     CUR
     GIF
     ICO
+    JPG
     LBM
     PCX
     PNG
