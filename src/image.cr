@@ -8,7 +8,7 @@ module IMG
   alias Init = LibIMG::Init
 
   enum Type
-    BPM
+    BMP
     CUR
     GIF
     ICO
