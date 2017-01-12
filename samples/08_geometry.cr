@@ -32,7 +32,7 @@ loop do
 
   # vertical line of yellow dots
   renderer.draw_color = {255, 255, 0, 255}
-  0.step(height, 4) do |i|
+  0.step(by: 4, to: height) do |i|
     renderer.draw_point(width / 2, i)
   end
 
