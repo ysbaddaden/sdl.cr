@@ -19,7 +19,7 @@ module SDL
     def surface
       @surface ||= begin
         surface = LibSDL.get_window_surface(self)
-        raise Error.new("SDL_GetWindowSurface")
+        raise Error.new("SDL_GetWindowSurface") unless surface
         Surface.new(surface)
       end
     end
