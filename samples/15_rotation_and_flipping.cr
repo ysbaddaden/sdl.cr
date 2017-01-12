@@ -28,8 +28,8 @@ loop do
   renderer.draw_color = {255, 255, 255, 255}
   renderer.clear
 
-  x = (window.surface.width - arrow.width) / 2
-  y = (window.surface.height - arrow.height) / 2
+  x = (window.width - arrow.width) / 2
+  y = (window.height - arrow.height) / 2
   renderer.copy(arrow, dstrect: {x, y, arrow.width, arrow.height}, angle: degrees, flip: flip)
 
   renderer.present
