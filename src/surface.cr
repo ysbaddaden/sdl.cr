@@ -16,7 +16,7 @@ module SDL
     end
   end
 
-  struct Surface
+  class Surface
     def initialize(@surface : LibSDL::Surface*)
     end
 
