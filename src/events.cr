@@ -203,10 +203,6 @@ module SDL
     struct Drop < Event
       @event : LibSDL::DropEvent
 
-      #def finalize
-      #  LibSDL.free(@event.file)
-      #end
-
       def filename
         String.new(@event.file)
       end
