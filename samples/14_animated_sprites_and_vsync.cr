@@ -4,6 +4,7 @@ require "../src/image"
 SDL.init(SDL::Init::VIDEO); at_exit { SDL.quit }
 IMG.init(IMG::Init::PNG); at_exit { IMG.quit }
 
+width, height = 640, 480
 window = SDL::Window.new("SDL tutorial", 640, 480)
 renderer = SDL::Renderer.new(window, SDL::Renderer::Flags::ACCELERATED | SDL::Renderer::Flags::PRESENTVSYNC)
 
@@ -25,8 +26,8 @@ loop do
   renderer.clear
 
   current_clip = sprite_clips[frame / slowdown]
-  x = (window.surface.width - current_clip.w) / 2
-  y = (window.surface.height - current_clip.h) / 2
+  x = (window.width - current_clip.w) / 2
+  y = (window.height - current_clip.h) / 2
   renderer.copy(sprite, current_clip, {x, y, current_clip.w, current_clip.h})
 
   renderer.present
