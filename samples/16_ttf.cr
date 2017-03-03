@@ -2,12 +2,12 @@ require "../src/sdl"
 require "../src/ttf"
 
 SDL.init(SDL::Init::VIDEO); at_exit { SDL.quit }
-TTF.init; at_exit { TTF.quit }
+SDL::TTF.init; at_exit { SDL::TTF.quit }
 
 window = SDL::Window.new("SDL tutorial", 640, 480)
 renderer = SDL::Renderer.new(window, SDL::Renderer::Flags::ACCELERATED | SDL::Renderer::Flags::PRESENTVSYNC)
 
-font = TTF::Font.new(File.join(__DIR__, "data", "lazy.ttf"), 28)
+font = SDL::TTF::Font.new(File.join(__DIR__, "data", "lazy.ttf"), 28)
 
 loop do
   case event = SDL::Event.wait

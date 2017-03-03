@@ -7,8 +7,8 @@ at_exit { SDL.quit }
 window = SDL::Window.new("SDL Tutorial", 640, 480)
 renderer = SDL::Renderer.new(window)
 
-IMG.init(IMG::Init::PNG)
-texture = IMG.load(File.join(__DIR__, "data", "loaded.png"), renderer)
+SDL::IMG.init(SDL::IMG::Init::PNG)
+texture = SDL::IMG.load(File.join(__DIR__, "data", "loaded.png"), renderer)
 
 loop do
   case event = SDL::Event.wait

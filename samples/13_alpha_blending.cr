@@ -2,13 +2,13 @@ require "../src/sdl"
 require "../src/image"
 
 SDL.init(SDL::Init::VIDEO); at_exit { SDL.quit }
-IMG.init(IMG::Init::PNG); at_exit { IMG.quit }
+SDL::IMG.init(SDL::IMG::Init::PNG); at_exit { SDL::IMG.quit }
 
 window = SDL::Window.new("SDL tutorial", 640, 480)
 renderer = SDL::Renderer.new(window)
 
-background = IMG.load(File.join(__DIR__, "data", "fadein.png"), renderer)
-modulated = IMG.load(File.join(__DIR__, "data", "fadeout.png"), renderer)
+background = SDL::IMG.load(File.join(__DIR__, "data", "fadein.png"), renderer)
+modulated = SDL::IMG.load(File.join(__DIR__, "data", "fadeout.png"), renderer)
 a = 255
 
 loop do

@@ -2,12 +2,12 @@ require "../src/sdl"
 require "../src/image"
 
 SDL.init(SDL::Init::VIDEO); at_exit { SDL.quit }
-IMG.init(IMG::Init::PNG); at_exit { IMG.quit }
+SDL::IMG.init(SDL::IMG::Init::PNG); at_exit { SDL::IMG.quit }
 
 window = SDL::Window.new("SDL tutorial", 640, 480)
 renderer = SDL::Renderer.new(window)
 
-image = IMG.load(File.join(__DIR__, "data", "sprites.png"))
+image = SDL::IMG.load(File.join(__DIR__, "data", "sprites.png"))
 image.color_key = {0, 255, 255}
 sprite = SDL::Texture.from(image, renderer)
 
