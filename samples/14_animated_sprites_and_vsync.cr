@@ -2,13 +2,13 @@ require "../src/sdl"
 require "../src/image"
 
 SDL.init(SDL::Init::VIDEO); at_exit { SDL.quit }
-IMG.init(IMG::Init::PNG); at_exit { IMG.quit }
+SDL::IMG.init(SDL::IMG::Init::PNG); at_exit { SDL::IMG.quit }
 
 width, height = 640, 480
 window = SDL::Window.new("SDL tutorial", 640, 480)
 renderer = SDL::Renderer.new(window, SDL::Renderer::Flags::ACCELERATED | SDL::Renderer::Flags::PRESENTVSYNC)
 
-sprite = IMG.load(File.join(__DIR__, "data", "foo_sprite.png"), renderer)
+sprite = SDL::IMG.load(File.join(__DIR__, "data", "foo_sprite.png"), renderer)
 sprite_clips = StaticArray(SDL::Rect, 4).new do |i|
   SDL::Rect.new(i * 64, 0, 64, 305)
 end
