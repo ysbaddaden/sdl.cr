@@ -105,7 +105,7 @@ lib LibSDL
   ) : Int
   fun convert_audio = SDL_ConvertAudio(cvt : AudioCVT*) : Int
 
-  MIX_MAXVOLUME = 128
+  Mix_MAXVOLUME = 128
   fun mix_audio = SDL_MixAudio(dst : UInt8*, src : UInt8*, len : UInt32, volume : Int)
   fun mix_audio_format = SDL_MixAudioFormat(dst : UInt8*, src : UInt8*, format : AudioFormat, len : UInt32, volume : Int)
 
