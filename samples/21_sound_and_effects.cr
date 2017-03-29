@@ -8,7 +8,7 @@ SDL::Mixer.open
 
 #music = SDL::Mixer.load_music(File.join(__DIR__, "data", "beat.wav"))
 #scratch = SDL::Mixer.load_wav(File.join(__DIR__, "data", "scratch.wav"))
-high = SDL::Mixer.load_wav(File.join(__DIR__, "data", "high.wav"))
+#high = SDL::Mixer.load_wav(File.join(__DIR__, "data", "high.wav"))
 #medium = SDL::Mixer.load_wav(File.join(__DIR__, "data", "medium.wav"))
 #low = SDL::Mixer.load_wav(File.join(__DIR__, "data", "low.wav"))
 
@@ -24,7 +24,7 @@ loop do
   when SDL::Event::Keyboard
     case event.sym
     when .key_1?
-      SDL::Mixer.play_wav(high)
+      #SDL::Mixer.play_wav(high)
     when .key_2?
     when .key_3?
     when .key_4?
