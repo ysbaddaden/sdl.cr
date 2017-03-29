@@ -3,6 +3,7 @@ require "./lib_sdl"
 @[Link("SDL2_mixer")]
 lib LibMixer
   alias Int = LibC::Int
+  alias Char = LibC::Char
 
   alias RWops = LibSDL::RWops
 
@@ -59,6 +60,8 @@ lib LibMixer
   end
   alias Music = Mix_Music
 
+  MIX_DEFAULT_FORMAT = LibSDL::AUDIO_S16LSB
+
   fun init = Mix_Init(flags : Init) : Int
   fun quit = Mix_Quit()
 
@@ -67,6 +70,7 @@ lib LibMixer
   
   fun allocate_channels = Mix_AllocateChannels(numchans : Int) : Int
   fun query_spec = Mix_QuerySpec(frequency : Int*, format : UInt16*, channels : Int*) : Int
+  fun load_wav = Mix_LoadWAV(file : Char*) : Chunk*
   fun load_wav_rw = Mix_LoadWAV_RW(src : RWops*, freesrc : Int) : Chunk*
   fun load_mus = Mix_LoadMUS(file : Char*) : Music*
   fun load_mus_rw = Mix_LoadMUS_RW(src : RWops*, freesrc : Int) : Music*
@@ -80,6 +84,8 @@ lib LibMixer
   fun get_num_music_decoders = Mix_GetNumMusicDecoders() : Int
   fun get_music_decoder = Mix_GetMusicDecoder(index : Int) : Char*
   fun get_music_type = Mix_GetMusicType(music : Music*) : MusicType
-
   fun get_music_hook_data = Mix_GetMusicHookData()
+
+  fun play_channel = Mix_PlayChannel(channel : Int, chunk : Chunk*, loops : Int) : Int
+  fun play_music = Mix_PlayMusic(music : Music*, loops : Int) : Int
 end

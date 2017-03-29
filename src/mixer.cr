@@ -16,6 +16,7 @@ module SDL
       WAV
     end
 
+    # Used to load the support for the flags. `quit` must be called during app cleanup
     def self.init(flags : Init)
       ret = LibMixer.init(flags)
       unless (ret & flags.value) == flags.value
@@ -25,6 +26,61 @@ module SDL
 
     def self.quit
       LibMixer.quit
+    end
+
+    # This is required to initial SDL_Mixer. It must be called before using any other function, but AFTER SDL has been initialized.
+    def self.open(frequency = 44100, format = LibMixer::MIX_DEFAULT_FORMAT, channels = 2, sample_size = 2048)
+      ret = LibMixer.open_audio(frequency, format, channels, sample_size)
+      if ret == 0
+        # audio is loaded
+      else
+        # an error has occurred
+      end
+    end
+
+    # load long sound file
+    def self.load_music(filename, type : Type? = nil)
+      SDL::RWops.open(filename, "rb") do |rwops|
+        if type
+          audio = LibMixer.load_mus_type_rw(rwops, type.to_s, 1)
+          raise SDL::Error.new("Mix_LoadMUSType_RW") unless audio
+        else
+          audio = LibMixer.load_mus_rw(rwops, 1)
+          raise SDL::Error.new("Mix_LoadMUS_RW") unless audio
+        end
+        audio
+      end
+    end
+
+    # free long sound file
+    def self.unload_music(music)
+      LibMixer.free_music(music)
+    end
+
+    # -1 is repeat until stopped
+    def self.play_music(music, repeats = -1)
+      LibMixer.play_music(music, repeats)
+    end
+
+    # load short sound file
+    def self.load_wav(filename)
+      #SDL::RWops.open(filename, "rb") do |rwops|
+      #  audio = LibMixer.load_wav_rw(rwops, 1)
+      #  raise SDL::Error.new("Mix_LoadWAV_RW") unless audio
+      #  audio
+      #end
+      LibMixer.load_wav(filename)
+    end
+
+    # free short sound file
+    def self.unload_wav(sound)
+      LibMixer.free_chunk(sound)
+    end
+
+    # -1 for channel is the nearest channel.
+    # 0 repeats is play once 
+    def self.play_wav(sound, channel = -1, repeats = 0)
+      LibMixer.play_channel(channel, sound, repeats)
     end
   end
 end
