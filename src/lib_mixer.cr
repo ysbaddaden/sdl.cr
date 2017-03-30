@@ -76,7 +76,6 @@ lib LibMixer
   
   fun allocate_channels = Mix_AllocateChannels(numchans : Int) : Int
   fun query_spec = Mix_QuerySpec(frequency : Int*, format : UInt16*, channels : Int*) : Int
-  fun load_wav = Mix_LoadWAV(file : Char*) : Chunk*
   fun load_wav_rw = Mix_LoadWAV_RW(src : RWops*, freesrc : Int) : Chunk*
   fun load_mus = Mix_LoadMUS(file : Char*) : Music*
   fun load_mus_rw = Mix_LoadMUS_RW(src : RWops*, freesrc : Int) : Music*
