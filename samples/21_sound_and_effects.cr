@@ -7,10 +7,12 @@ SDL::Mixer.init(SDL::Mixer::Init::MP3); at_exit { SDL::Mixer.quit }
 SDL::Mixer.open
 
 music = SDL::Mixer.load_music(File.join(__DIR__, "data", "beat.wav"))
-#scratch = SDL::Mixer.load_wav(File.join(__DIR__, "data", "scratch.wav"))
-#high = SDL::Mixer.load_wav(File.join(__DIR__, "data", "high.wav"))
-#medium = SDL::Mixer.load_wav(File.join(__DIR__, "data", "medium.wav"))
-#low = SDL::Mixer.load_wav(File.join(__DIR__, "data", "low.wav"))
+
+sounds = {} of String => LibMixer::Mix_Chunk*
+names = %w(high medium low scratch)
+names.each do |name|
+  sounds[name] = SDL::Mixer.load_wav(File.join(__DIR__, "data", "#{name}.wav"))
+end
 
 window = SDL::Window.new("SDL Tutorial", 640, 480)
 png = SDL::IMG.load(File.join(__DIR__, "data", "prompt.png"))
@@ -24,7 +26,7 @@ loop do
   when SDL::Event::Keyboard
     case event.sym
     when .key_1?
-      #SDL::Mixer.play_wav(high)
+      SDL::Mixer.play_wav(sounds["high"])
     when .key_2?
     when .key_3?
     when .key_4?
