@@ -40,16 +40,17 @@ module SDL
 
     # load long sound file
     def self.load_music(filename, type : Type? = nil)
-      SDL::RWops.open(filename, "rb") do |rwops|
-        if type
-          audio = LibMixer.load_mus_type_rw(rwops, type.to_s, 1)
-          raise SDL::Error.new("Mix_LoadMUSType_RW") unless audio
-        else
-          audio = LibMixer.load_mus_rw(rwops, 1)
-          raise SDL::Error.new("Mix_LoadMUS_RW") unless audio
-        end
-        audio
-      end
+      #SDL::RWops.open(filename, "rb") do |rwops|
+      #  if type
+      #    audio = LibMixer.load_mus_type_rw(rwops, type.to_s, 1)
+      #    raise SDL::Error.new("Mix_LoadMUSType_RW") unless audio
+      #  else
+      #    audio = LibMixer.load_mus_rw(rwops, 1)
+      #    raise SDL::Error.new("Mix_LoadMUS_RW") unless audio
+      #  end
+      #  audio
+      #end
+      LibMixer.load_mus(filename)
     end
 
     # free long sound file
@@ -62,14 +63,34 @@ module SDL
       LibMixer.play_music(music, repeats)
     end
 
+    def self.pause_music
+      LibMixer.pause_music
+    end
+
+    def self.stop_music
+      LibMixer.halt_music
+    end
+
+    def self.music_paused?
+      LibMixer.music_paused == 1
+    end
+
+    def self.music_playing?
+      LibMixer.music_playing == 1
+    end
+
+    def self.resume_playing_music
+      LibMixer.resume_music
+    end
+
     # load short sound file
     def self.load_wav(filename)
-      #SDL::RWops.open(filename, "rb") do |rwops|
-      #  audio = LibMixer.load_wav_rw(rwops, 1)
-      #  raise SDL::Error.new("Mix_LoadWAV_RW") unless audio
-      #  audio
-      #end
-      LibMixer.load_wav(filename)
+      puts "LOADING FILE: #{filename}"
+      SDL::RWops.open(filename, "rb") do |rwops|
+        audio = LibMixer.load_wav_rw(rwops, 1)
+        raise SDL::Error.new("Mix_LoadWAV_RW") unless audio
+        audio
+      end
     end
 
     # free short sound file

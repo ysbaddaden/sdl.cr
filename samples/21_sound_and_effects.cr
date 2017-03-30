@@ -6,7 +6,7 @@ SDL.init(SDL::Init::VIDEO | SDL::Init::AUDIO); at_exit { SDL.quit }
 SDL::Mixer.init(SDL::Mixer::Init::MP3); at_exit { SDL::Mixer.quit }
 SDL::Mixer.open
 
-#music = SDL::Mixer.load_music(File.join(__DIR__, "data", "beat.wav"))
+music = SDL::Mixer.load_music(File.join(__DIR__, "data", "beat.wav"))
 #scratch = SDL::Mixer.load_wav(File.join(__DIR__, "data", "scratch.wav"))
 #high = SDL::Mixer.load_wav(File.join(__DIR__, "data", "high.wav"))
 #medium = SDL::Mixer.load_wav(File.join(__DIR__, "data", "medium.wav"))
@@ -29,6 +29,15 @@ loop do
     when .key_3?
     when .key_4?
     when .key_9?
+      if SDL::Mixer.music_playing?
+        SDL::Mixer.pause_music
+      else
+        if SDL::Mixer.music_paused?
+          SDL::Mixer.resume_playing_music
+        else
+          SDL::Mixer.play_music(music)
+        end
+      end
     when .key_0?
     end if event.keyup?
   end

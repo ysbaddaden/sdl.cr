@@ -35,11 +35,10 @@ lib LibMixer
     MUS_MODPLUG
   end
 
-  #struct MusicCMD
-  #  file : Int*
-  #  cmd : Int*
-  #
-  #end
+  struct MusicCMD
+    file : Int*
+    cmd : Int*
+  end
 
   struct Mix_Chunk
     allocated : Int
@@ -49,14 +48,21 @@ lib LibMixer
   end
   alias Chunk = Mix_Chunk
 
+  struct WAVStream
+    src : RWops*
+    freesrc : Bool
+    numloops : Int
+  end
+
+  union Data
+    cmd : MusicCMD*
+    wave : WAVStream*
+    #mp3 : SMPEG*
+    #ogg : OGG_music*
+  end
   struct Mix_Music
     type : MusicType
-    #union Data
-    #  cmd : MusicCMD*
-    #  wave : WAVStream*
-    #  mp3 : SMPEG*
-    #  ogg : OGG_music*
-    #end
+    data : Data
   end
   alias Music = Mix_Music
 
@@ -88,4 +94,10 @@ lib LibMixer
 
   fun play_channel = Mix_PlayChannel(channel : Int, chunk : Chunk*, loops : Int) : Int
   fun play_music = Mix_PlayMusic(music : Music*, loops : Int) : Int
+
+  fun music_playing = Mix_PlayingMusic() : Int
+  fun music_paused = Mix_PausedMusic() : Int
+  fun resume_music = Mix_ResumeMusic()
+  fun pause_music = Mix_PauseMusic()
+  fun halt_music = Mix_HaltMusic() : Int
 end
