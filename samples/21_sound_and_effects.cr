@@ -34,16 +34,15 @@ loop do
     when .key_4?
       SDL::Mixer.play_wav(sounds["scratch"])
     when .key_9?
-      if SDL::Mixer.music_playing?
+      if SDL::Mixer.music_paused?
+        SDL::Mixer.resume_playing_music
+      elsif SDL::Mixer.music_playing?
         SDL::Mixer.pause_music
       else
-        if SDL::Mixer.music_paused?
-          SDL::Mixer.resume_playing_music
-        else
-          SDL::Mixer.play_music(music)
-        end
+        SDL::Mixer.play_music(music)
       end
     when .key_0?
+      SDL::Mixer.stop_music
     end if event.keyup?
   end
 
