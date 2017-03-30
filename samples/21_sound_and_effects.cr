@@ -28,8 +28,11 @@ loop do
     when .key_1?
       SDL::Mixer.play_wav(sounds["high"])
     when .key_2?
+      SDL::Mixer.play_wav(sounds["medium"])
     when .key_3?
+      SDL::Mixer.play_wav(sounds["low"])
     when .key_4?
+      SDL::Mixer.play_wav(sounds["scratch"])
     when .key_9?
       if SDL::Mixer.music_playing?
         SDL::Mixer.pause_music

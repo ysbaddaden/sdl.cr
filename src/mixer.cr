@@ -95,9 +95,9 @@ module SDL
     end
 
     # -1 for channel is the nearest channel.
-    # 0 repeats is play once 
-    def self.play_wav(sound, channel = -1, repeats = 0)
-      LibMixer.play_channel(channel, sound, repeats)
+    # 0 repeats is play once
+    def self.play_wav(sound, channel = -1, repeats = 0, ticks = -1)
+      LibMixer.play_channel_timed(channel, sound, repeats, ticks)
     end
   end
 end

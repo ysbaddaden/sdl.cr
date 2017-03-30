@@ -91,7 +91,7 @@ lib LibMixer
   fun get_music_type = Mix_GetMusicType(music : Music*) : MusicType
   fun get_music_hook_data = Mix_GetMusicHookData()
 
-  fun play_channel = Mix_PlayChannel(channel : Int, chunk : Chunk*, loops : Int) : Int
+  fun play_channel_timed = Mix_PlayChannelTimed(channel : Int, chunk : Chunk*, loops : Int, ticks : Int) : Int
   fun play_music = Mix_PlayMusic(music : Music*, loops : Int) : Int
 
   fun music_playing = Mix_PlayingMusic() : Int
