@@ -3,7 +3,7 @@ require "../src/image"
 require "../src/mixer"
 
 SDL.init(SDL::Init::VIDEO | SDL::Init::AUDIO); at_exit { SDL.quit }
-SDL::Mixer.init(SDL::Mixer::MixInit::MP3); at_exit { SDL::Mixer.quit }
+SDL::Mixer.init(SDL::Mixer::Init::MP3); at_exit { SDL::Mixer.quit }
 SDL::Mixer.open
 
 music = SDL::Mixer.load_music(File.join(__DIR__, "data", "beat.wav"))

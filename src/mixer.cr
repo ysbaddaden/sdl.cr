@@ -3,9 +3,9 @@ require "./sdl"
 
 module SDL
   module Mixer
-    alias MixInit = LibMixer::Init
+    alias Init = LibMixer::Init
     
-    enum SoundType
+    enum Type
       AIFF
       FLAC
       MIDI
@@ -17,7 +17,7 @@ module SDL
     end
 
     # Used to load the support for the flags. `quit` must be called during app cleanup
-    def self.init(flags : MixInit)
+    def self.init(flags : Init)
       ret = LibMixer.init(flags)
       unless (ret & flags.value) == flags.value
         raise SDL::Error.new("Mix_Init failed to init #{flags}")
@@ -39,7 +39,7 @@ module SDL
     end
 
     # load long sound file
-    def self.load_music(filename, type : SoundType? = nil)
+    def self.load_music(filename, type : Type? = nil)
       rwops = LibSDL.rw_from_file(filename, "rb")
       if type
         audio = LibMixer.load_mus_type_rw(rwops, type.to_s, 1)
