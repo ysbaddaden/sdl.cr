@@ -89,6 +89,10 @@ module SDL
       LibMixer.fade_in_music(music, loops, ms)
     end
 
+    def self.fade_out_music(ms = 1000)
+      LibMixer.fade_out_music(ms)
+    end
+
     # load short sound file
     def self.load_wav(filename)
       rwops = LibSDL.rw_from_file(filename, "rb")

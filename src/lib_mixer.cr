@@ -101,4 +101,5 @@ lib LibMixer
   fun pause_music = Mix_PauseMusic()
   fun halt_music = Mix_HaltMusic() : Int
   fun fade_in_music = Mix_FadeInMusic(music : Music*, loops : Int, ms : Int)
+  fun fade_out_music = Mix_FadeOutMusic(ms : Int)
 end
