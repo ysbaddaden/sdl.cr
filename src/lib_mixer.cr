@@ -96,6 +96,7 @@ lib LibMixer
 
   fun music_playing = Mix_PlayingMusic() : Int
   fun music_paused = Mix_PausedMusic() : Int
+  fun rewind_music = Mix_RewindMusic()
   fun resume_music = Mix_ResumeMusic()
   fun pause_music = Mix_PauseMusic()
   fun halt_music = Mix_HaltMusic() : Int

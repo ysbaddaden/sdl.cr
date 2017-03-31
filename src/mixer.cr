@@ -81,6 +81,10 @@ module SDL
       LibMixer.resume_music
     end
 
+    def self.rewind_music
+      LibMixer.rewind_music
+    end
+
     # load short sound file
     def self.load_wav(filename)
       rwops = LibSDL.rw_from_file(filename, "rb")
