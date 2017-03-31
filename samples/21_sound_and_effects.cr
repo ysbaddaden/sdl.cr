@@ -17,6 +17,7 @@ end
 window = SDL::Window.new("SDL Tutorial", 640, 480)
 png = SDL::IMG.load(File.join(__DIR__, "data", "prompt.png"))
 png = png.convert(window.surface)
+activekey = [] of LibSDL::Keycode
 
 loop do
   case event = SDL::Event.wait
@@ -24,28 +25,32 @@ loop do
     #SDL::Mixer.unload_music(music)
     break
   when SDL::Event::Keyboard
-    case event.sym
-    when .key_1?
-      SDL::Mixer.play_wav(sounds["high"])
-    when .key_2?
-      SDL::Mixer.play_wav(sounds["medium"])
-    when .key_3?
-      SDL::Mixer.play_wav(sounds["low"])
-    when .key_4?
-      SDL::Mixer.play_wav(sounds["scratch"])
-    when .key_9?
-      if SDL::Mixer.music_paused?
-        SDL::Mixer.resume_playing_music
-      elsif SDL::Mixer.music_playing?
-        SDL::Mixer.pause_music
-      else
-        SDL::Mixer.play_music(music)
+    key = event.sym
+    unless activekey.includes? key
+      case key
+      when .key_1?
+        SDL::Mixer.play_wav(sounds["high"])
+      when .key_2?
+        SDL::Mixer.play_wav(sounds["medium"])
+      when .key_3?
+        SDL::Mixer.play_wav(sounds["low"])
+      when .key_4?
+        SDL::Mixer.play_wav(sounds["scratch"])
+      when .key_9?
+        if SDL::Mixer.music_paused?
+          SDL::Mixer.resume_playing_music
+        elsif SDL::Mixer.music_playing?
+          SDL::Mixer.pause_music
+        else
+          SDL::Mixer.play_music(music)
+        end
+      when .key_0?
+        SDL::Mixer.stop_music
       end
-    when .key_0?
-      SDL::Mixer.stop_music
-    end if event.keyup?
+      activekey << key
+    end
+    activekey.delete key if event.keyup?
   end
-
   png.blit(window.surface)
   window.update
 end
