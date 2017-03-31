@@ -4,6 +4,7 @@ require "./sdl"
 module SDL
   module Mixer
     alias Init = LibMixer::Init
+    MAX_VOLUME = 128
     
     enum Type
       AIFF
@@ -91,6 +92,14 @@ module SDL
 
     def self.fade_out_music(ms = 1000)
       LibMixer.fade_out_music(ms)
+    end
+
+    def self.music_volume=(volume)
+      LibMixer.music_volume(volume > MAX_VOLUME ? MAX_VOLUME : volume)
+    end
+
+    def self.music_volume()
+      LibMixer.music_volume(-1)
     end
 
     # load short sound file
