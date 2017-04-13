@@ -28,11 +28,11 @@ loop do
   end
 
   # clear sreen in white
-  renderer.draw_color = {255, 255, 255, 255}
+  renderer.draw_color = SDL::Color[255, 255, 255, 255]
   renderer.clear
 
   renderer.copy(background)
-  renderer.copy(foo, dstrect: {240, 190, foo.width, foo.height})
+  renderer.copy(foo, dstrect: SDL::Rect[240, 190, foo.width, foo.height])
 
   renderer.present
 end

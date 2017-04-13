@@ -15,15 +15,15 @@ loop do
     break
   end
 
-  renderer.draw_color = {255, 255, 255, 255}
+  renderer.draw_color = SDL::Color[255, 255, 255, 255]
   renderer.clear
 
-  color = {0, 0, 0, 255}
+  color = SDL::Color[255, 0, 0, 255]
   surface = font.render_shaded("The quick brow fox jumps over the lazy dog.", color, renderer.draw_color)
 
   x = (window.width - surface.width) / 2
   y = (window.height - surface.height) / 2
-  renderer.copy(surface, dstrect: {x, y, surface.width, surface.height})
+  renderer.copy(surface, dstrect: SDL::Rect[x, y, surface.width, surface.height])
 
   renderer.present
 end

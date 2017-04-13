@@ -17,19 +17,19 @@ loop do
   end
 
   # clear sreen in white
-  renderer.draw_color = {255, 255, 0, 255}
+  renderer.draw_color = SDL::Color[255, 255, 0, 255]
   renderer.clear
 
   # top left
-  renderer.viewport = {20, 20, 290, 210}
+  renderer.viewport = SDL::Rect[20, 20, 290, 210]
   renderer.copy(png)
 
   # top left
-  renderer.viewport = {330, 20, 290, 210}
+  renderer.viewport = SDL::Rect[330, 20, 290, 210]
   renderer.copy(png)
 
   # bottom
-  renderer.viewport = {20, 250, 600, 210}
+  renderer.viewport = SDL::Rect[20, 250, 600, 210]
   renderer.copy(png)
 
   renderer.present

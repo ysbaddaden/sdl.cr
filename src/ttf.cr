@@ -5,7 +5,6 @@ require "./color"
 module SDL
   module TTF
     alias Error = SDL::Error
-    alias Color = SDL::Color
 
     def self.init
       if LibTTF.was_init == 1
@@ -184,10 +183,10 @@ module SDL
       # dirty" solid mode.
       def render_solid(text : String, color, ascii = false)
         if ascii
-          surface = LibTTF.render_text_solid(self, text, Color.from(color))
+          surface = LibTTF.render_text_solid(self, text, color)
           raise Error.new("TTF_RenderText_Solid") unless surface
         else
-          surface = LibTTF.render_utf8_solid(self, text, Color.from(color))
+          surface = LibTTF.render_utf8_solid(self, text, color)
           raise Error.new("TTF_RenderUTF8_Solid") unless surface
         end
         SDL::Surface.new(surface)
@@ -197,10 +196,10 @@ module SDL
       # nice" shaded mode.
       def render_shaded(text : String, color, background, ascii = false)
         if ascii
-          surface = LibTTF.render_text_shaded(self, text, Color.from(color), Color.from(background))
+          surface = LibTTF.render_text_shaded(self, text, color, background)
           raise Error.new("TTF_RenderText_Shaded") unless surface
         else
-          surface = LibTTF.render_utf8_shaded(self, text, Color.from(color), Color.from(background))
+          surface = LibTTF.render_utf8_shaded(self, text, color, background)
           raise Error.new("TTF_RenderUTF8_Shaded") unless surface
         end
         SDL::Surface.new(surface)
@@ -210,10 +209,10 @@ module SDL
       # slow but ultra nice over another image" blended mode.
       def render_blended(text : String, color, ascii = false)
         if ascii
-          surface = LibTTF.render_text_blended(self, text, Color.from(color))
+          surface = LibTTF.render_text_blended(self, text, color)
           raise Error.new("TTF_RenderText_Blended") unless surface
         else
-          surface = LibTTF.render_utf8_blended(self, text, Color.from(color))
+          surface = LibTTF.render_utf8_blended(self, text, color)
           raise Error.new("TTF_RenderUTF8_Blended") unless surface
         end
         SDL::Surface.new(surface)
@@ -223,10 +222,10 @@ module SDL
       # wrapped mode.
       #def render_blended_wrapper(text : String, color, wrap_length, ascii = false)
       #  if ascii
-      #    surface = LibTTF.render_text_blended_wrapped(self, text, Color.from(color), wrap_length)
+      #    surface = LibTTF.render_text_blended_wrapped(self, text, color, wrap_length)
       #    raise Error.new("TTF_RenderText_Blended_Wrapped") unless surface
       #  else
-      #    surface = LibTTF.render_utf8_blended_wrapped(self, text, Color.from(color), wrap_length)
+      #    surface = LibTTF.render_utf8_blended_wrapped(self, text, color, wrap_length)
       #    raise Error.new("TTF_RenderUTF8_Blended_Wrapped") unless surface
       #  end
       #  SDL::Surface.new(surface)

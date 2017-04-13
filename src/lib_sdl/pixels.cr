@@ -107,12 +107,7 @@ lib LibSDL
   #  YVYU = SDL_DEFINE_PIXELFOURCC('Y', 'V', 'Y', 'U')
   #end
 
-  struct Color
-    r : UInt8
-    g : UInt8
-    b : UInt8
-    a : UInt8
-  end
+  alias Color = SDL::Color
 
   struct Palette
     ncolors : Int
