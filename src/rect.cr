@@ -1,73 +1,29 @@
 module SDL
+  @[Extern]
   struct Point
-    property x, y
+    property x : Int32
+    property y : Int32
 
-    def initialize(@x : Int32, @y : Int32)
+    macro [](x, y)
+      SDL::Point.new({{x}}, {{y}})
     end
 
-    def self.from(pt : Point)
-      pt
-    end
-
-    def self.from(pt : LibSDL::Point*)
-      Point.new(pt.value.x, pt.value.y)
-    end
-
-    def self.from(pt : Tuple)
-      Point.new(*pt)
-    end
-
-    def self.from(pt : NamedTuple)
-      Point.new(pt.x, pt.y)
-    end
-
-    def self.from(pt : Nil)
-      nil
-    end
-
-    # OPTIMIZE: avoid copy
-    def to_unsafe
-      pt = GC.malloc(sizeof(LibSDL::Point)).as(LibSDL::Point*)
-      pt.value.x = x
-      pt.value.y = y
-      pt
+    def initialize(@x, @y)
     end
   end
 
+  @[Extern]
   struct Rect
-    property x, y, w, h
+    property x : Int32
+    property y : Int32
+    property w : Int32
+    property h : Int32
 
-    def initialize(@x : Int32, @y : Int32, @w : Int32, @h : Int32)
+    macro [](x, y, w, h)
+      SDL::Rect.new({{x}}, {{y}}, {{w}}, {{h}})
     end
 
-    def self.from(rect : Rect)
-      rect
-    end
-
-    def self.from(rect : LibSDL::Rect*)
-      new(rect.value.x, rect.value.y, rect.value.w, rect.value.h)
-    end
-
-    def self.from(rect : Tuple)
-      new(*rect)
-    end
-
-    def self.from(rect : NamedTuple)
-      new(rect.x, rect.y, rect.w, rect.h)
-    end
-
-    def self.from(rect : Nil)
-      nil
-    end
-
-    # OPTIMIZE: avoid copy
-    def to_unsafe
-      rect = Pointer(LibSDL::Rect).malloc
-      rect.value.x = x
-      rect.value.y = y
-      rect.value.w = w
-      rect.value.h = h
-      rect
+    def initialize(@x, @y, @w, @h)
     end
   end
 end

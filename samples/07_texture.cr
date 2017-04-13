@@ -16,10 +16,10 @@ loop do
     break
   end
 
-  renderer.draw_color = {255, 0, 0, 255}
+  renderer.draw_color = SDL::Color[255, 0, 0, 255]
   renderer.clear
 
-  renderer.copy(texture, dstrect: {20, 20, 600, 440})
+  renderer.copy(texture, dstrect: SDL::Rect[20, 20, 600, 440])
 
   renderer.present
 end

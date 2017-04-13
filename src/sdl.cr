@@ -1,3 +1,19 @@
+module SDL
+  # Internal macro to return either a pointer to a struct or return or null
+  # pointer. This compiler gymnastic is mostly required to pass a reference
+  # to Rect which may be nil.
+  #
+  # :nodoc:
+  macro pointer_or_null(variable, type)
+    if {{variable.id}}
+      %copy = {{variable.id}}
+      pointerof(%copy)
+    else
+      Pointer({{type.id}}).null
+    end
+  end
+end
+
 require "./lib_sdl"
 require "./events"
 require "./hint"

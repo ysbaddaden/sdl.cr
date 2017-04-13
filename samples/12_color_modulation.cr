@@ -35,7 +35,7 @@ loop do
   g = g.clamp(0, 255)
   b = b.clamp(0, 255)
 
-  renderer.draw_color = {255, 255, 255, 255}
+  renderer.draw_color = SDL::Color[255, 255, 255, 255]
   renderer.clear
 
   image.color_mod = {r, g, b}

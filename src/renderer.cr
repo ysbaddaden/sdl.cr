@@ -71,25 +71,25 @@ module SDL
     end
 
     def viewport=(rect)
-      ret = LibSDL.render_set_viewport(self, Rect.from(rect))
+      ret = LibSDL.render_set_viewport(self, pointerof(rect))
       raise Error.new("SDL_RenderSetViewport") unless ret == 0
       rect
     end
 
     def viewport
       LibSDL.render_get_viewport(self, out rect)
-      Rect.from(rect)
+      rect
     end
 
     def clip_rect=(rect)
-      ret = LibSDL.render_set_clip_rect(self, Rect.from(rect))
+      ret = LibSDL.render_set_clip_rect(self, pointerof(rect))
       raise Error.new("SDL_RenderSetClipRect") unless ret == 0
       rect
     end
 
     def clip_rect
       LibSDL.render_get_cli_rect(self, out rect)
-      Rect.from(rect)
+      rect
     end
 
     def scale=(xy)
@@ -104,17 +104,17 @@ module SDL
     end
 
     # Set the color for drawing operations (lines, rectangles and clear).
-    def draw_color=(rgba)
-      ret = LibSDL.set_render_draw_color(self, *rgba)
+    def draw_color=(color)
+      ret = LibSDL.set_render_draw_color(self, color.r, color.g, color.b, color.a)
       raise Error.new("SDL_SetRenderDrawColor") unless ret == 0
-      rgba
+      color
     end
 
     # Get the current drawing color.
     def draw_color
       ret = LibSDL.get_render_draw_color(self, out r, out g, out b, out a)
       raise Error.new("SDL_GetRenderDrawColor") unless ret == 0
-      {r.to_i, g.to_i, b.to_i, a.to_i}
+      Color.new(r, g, b, a)
     end
 
     # Set the blen mode for drawing operations (fill, lines).
@@ -173,39 +173,39 @@ module SDL
 
     # Draw a single `Rect`.
     def draw_rect(rect)
-      ret = LibSDL.render_draw_rect(self, Rect.from(rect))
+      ret = LibSDL.render_draw_rect(self, pointerof(rect))
       raise Error.new("SDL_RenderDrawRect") unless ret == 0
     end
 
     # Draw a single `Rect`.
     def draw_rect(x, y, w, h)
-      ret = LibSDL.render_draw_rect(self, Rect.new(x, y, w, h))
+      rect = Rect.new(x, y, w, h)
+      ret = LibSDL.render_draw_rect(self, pointerof(rect))
       raise Error.new("SDL_RenderDrawRect") unless ret == 0
     end
 
     # Draw many `Rect` at once.
     def draw_rects(rects)
-      sdl_rects = rects.map { |r| Rect.from(r) }
-      ret = LibSDL.render_draw_rects(self, sdl_rects, sdl_rects.size)
+      ret = LibSDL.render_draw_rects(self, rects, rects.size)
       raise Error.new("SDL_RenderDrawRects") unless ret == 0
     end
 
     # Fill a `Rect` with the current `draw_color` and `draw_blend_mode`.
     def fill_rect(rect)
-      ret = LibSDL.render_fill_rect(self, Rect.from(rect))
+      ret = LibSDL.render_fill_rect(self, pointerof(rect))
       raise Error.new("SDL_RenderFillRect") unless ret == 0
     end
 
     # Fill a `Rect` with the current `draw_color` and `draw_blend_mode`.
     def fill_rect(x, y, w, h)
-      ret = LibSDL.render_fill_rect(self, Rect.new(x, y, w, h))
+      rect = Rect.new(x, y, w, h)
+      ret = LibSDL.render_fill_rect(self, pointerof(rect))
       raise Error.new("SDL_RenderFillRect") unless ret == 0
     end
 
     # Fill many `Rect` at once with the current `draw_color` and `draw_blend_mode`.
     def fill_rects(rects)
-      sdl_rects = rects.map { |r| Rect.from(r) }
-      ret = LibSDL.render_fill_rects(self, sdl_rects, sdl_rects.size)
+      ret = LibSDL.render_fill_rects(self, rects, rects.size)
       raise Error.new("SDL_RenderFillRects") unless ret == 0
     end
 
@@ -213,13 +213,13 @@ module SDL
     # texture, and place or resize it on the renderer. By default copies the
     # whole texture resized to fill the whole renderer.
     def copy(texture, srcrect = nil, dstrect = nil)
-      LibSDL.render_copy(self, texture, Rect.from(srcrect), Rect.from(dstrect))
+      LibSDL.render_copy(self, texture, SDL.pointer_or_null(srcrect, Rect), SDL.pointer_or_null(dstrect, Rect))
     end
 
     # Copy a texture to the renderer's target texture, with extra rotation and
     # flipping options.
     def copy(texture, srcrect = nil, dstrect = nil, angle = 0, center = nil, flip : Flip = Flip::NONE)
-      LibSDL.render_copy_ex(self, texture, Rect.from(srcrect), Rect.from(dstrect), angle, Point.from(center), flip)
+      LibSDL.render_copy_ex(self, texture, SDL.pointer_or_null(srcrect, Rect), SDL.pointer_or_null(dstrect, Rect), angle, SDL.pointer_or_null(center, Point), flip)
     end
 
     # Transforms a surface into a texture, then copies it to the renderer's

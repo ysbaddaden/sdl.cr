@@ -21,6 +21,6 @@ loop do
     end
   end
 
-  bmp.blit_scaled(window.surface, dstrect: SDL::Rect.new(20, 20, 600, 440))
+  bmp.blit_scaled(window.surface, dstrect: SDL::Rect[20, 20, 600, 440])
   window.update
 end

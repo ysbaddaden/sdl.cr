@@ -19,13 +19,13 @@ loop do
     break
   end
 
-  renderer.draw_color = {255, 255, 255, 255}
+  renderer.draw_color = SDL::Color[255, 255, 255, 255]
   renderer.clear
 
-  renderer.copy(sprite, {0, 0, 100, 100}, {0, 0, 100, 100})
-  renderer.copy(sprite, {100, 0, 100, 100}, {width - 100, 0, 100, 100})
-  renderer.copy(sprite, {0, 100, 100, 100}, {0, height - 100, 100, 100})
-  renderer.copy(sprite, {100, 100, 100, 100}, {width - 100, height - 100, 100, 100})
+  renderer.copy(sprite, SDL::Rect[0, 0, 100, 100], SDL::Rect[0, 0, 100, 100])
+  renderer.copy(sprite, SDL::Rect[100, 0, 100, 100], SDL::Rect[width - 100, 0, 100, 100])
+  renderer.copy(sprite, SDL::Rect[0, 100, 100, 100], SDL::Rect[0, height - 100, 100, 100])
+  renderer.copy(sprite, SDL::Rect[100, 100, 100, 100], SDL::Rect[width - 100, height - 100, 100, 100])
 
   renderer.present
 end

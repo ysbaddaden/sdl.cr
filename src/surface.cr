@@ -92,7 +92,7 @@ module SDL
     end
 
     def clip_rect=(rect)
-      ret = LibSDL.set_clip_rect(self, Rect.from(rect))
+      ret = LibSDL.set_clip_rect(self, pointerof(rect))
       raise Error.new("SDL_SetClipRect") unless ret == 1
       rect
     end
@@ -100,7 +100,7 @@ module SDL
     def clip_rect
       ret = LibSDL.get_clip_rect(self, out rect)
       raise Error.new("SDL_GetClipRect") unless ret == 1
-      Rect.from(rect)
+      rect
     end
 
     # Maps an RGB(A) color for this surface.
@@ -118,11 +118,11 @@ module SDL
     end
 
     # Fill a *rect* of the surface with a RGB(A) color.
-    def fill(rect : Rect?, r, g, b, a = nil)
+    def fill(rect, r, g, b, a = nil)
       if a
-        LibSDL.fill_rect(self, Rect.from(rect), color(r, g, b, a))
+        LibSDL.fill_rect(self, pointerof(rect), color(r, g, b, a))
       else
-        LibSDL.fill_rect(self, Rect.from(rect), color(r, g, b))
+        LibSDL.fill_rect(self, pointerof(rect), color(r, g, b))
       end
     end
 
@@ -137,7 +137,7 @@ module SDL
 
     # Fast copy of this Surface to *dst* Surface.
     def blit(dst : Surface, srcrect = nil, dstrect = nil)
-      if LibSDL.upper_blit(self, Rect.from(srcrect), dst, Rect.from(dstrect)) != 0
+      if LibSDL.upper_blit(self, SDL.pointer_or_null(srcrect, Rect), dst, SDL.pointer_or_null(dstrect, Rect)) != 0
         raise Error.new("SDL_BlitSurface")
       end
     end
@@ -145,7 +145,7 @@ module SDL
     # Fast scaled copy of this Surface to *dst* Surface. Scales to the whole
     # surface by default.
     def blit_scaled(dst : Surface, srcrect = nil, dstrect = nil)
-      if LibSDL.upper_blit_scaled(self, Rect.from(srcrect), dst, Rect.from(dstrect)) != 0
+      if LibSDL.upper_blit_scaled(self, SDL.pointer_or_null(srcrect, Rect), dst, SDL.pointer_or_null(dstrect, Rect)) != 0
         raise Error.new("SDL_BlitScaled")
       end
     end

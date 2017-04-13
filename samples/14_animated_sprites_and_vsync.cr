@@ -22,13 +22,13 @@ loop do
     break
   end
 
-  renderer.draw_color = {255, 255, 255, 255}
+  renderer.draw_color = SDL::Color[255, 255, 255, 255]
   renderer.clear
 
   current_clip = sprite_clips[frame / slowdown]
   x = (window.width - current_clip.w) / 2
   y = (window.height - current_clip.h) / 2
-  renderer.copy(sprite, current_clip, {x, y, current_clip.w, current_clip.h})
+  renderer.copy(sprite, current_clip, SDL::Rect[x, y, current_clip.w, current_clip.h])
 
   renderer.present
 
