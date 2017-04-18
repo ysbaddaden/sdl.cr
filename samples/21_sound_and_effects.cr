@@ -1,17 +1,17 @@
 require "../src/sdl"
 require "../src/image"
-require "../src/mixer"
+require "../src/mix"
 
 SDL.init(SDL::Init::VIDEO | SDL::Init::AUDIO); at_exit { SDL.quit }
-SDL::Mixer.init(SDL::Mixer::Init::MP3); at_exit { SDL::Mixer.quit }
-SDL::Mixer.open
+SDL::MIX.init(SDL::MIX::Init::MP3); at_exit { SDL::MIX.quit }
+SDL::MIX.open
 
-music = SDL::Mixer.load_music(File.join(__DIR__, "data", "beat.wav"))
+music = SDL::MIX.load_music(File.join(__DIR__, "data", "beat.wav"))
 
-sounds = {} of String => LibMixer::Mix_Chunk*
+sounds = {} of String => LibMIX::Mix_Chunk*
 names = %w(high medium low scratch)
 names.each do |name|
-  sounds[name] = SDL::Mixer.load_wav(File.join(__DIR__, "data", "#{name}.wav"))
+  sounds[name] = SDL::MIX.load_wav(File.join(__DIR__, "data", "#{name}.wav"))
 end
 
 window = SDL::Window.new("SDL Tutorial", 640, 480)
@@ -22,30 +22,30 @@ activekey = [] of LibSDL::Keycode
 loop do
   case event = SDL::Event.wait
   when SDL::Event::Quit
-    #SDL::Mixer.unload_music(music)
+    #SDL::MIX.unload_music(music)
     break
   when SDL::Event::Keyboard
     key = event.sym
     unless activekey.includes? key
       case key
       when .key_1?
-        SDL::Mixer.play_wav(sounds["high"])
+        SDL::MIX.play_wav(sounds["high"])
       when .key_2?
-        SDL::Mixer.play_wav(sounds["medium"])
+        SDL::MIX.play_wav(sounds["medium"])
       when .key_3?
-        SDL::Mixer.play_wav(sounds["low"])
+        SDL::MIX.play_wav(sounds["low"])
       when .key_4?
-        SDL::Mixer.play_wav(sounds["scratch"])
+        SDL::MIX.play_wav(sounds["scratch"])
       when .key_9?
-        if SDL::Mixer.music_paused?
-          SDL::Mixer.resume_playing_music
-        elsif SDL::Mixer.music_playing?
-          SDL::Mixer.pause_music
+        if SDL::MIX.music_paused?
+          SDL::MIX.resume_playing_music
+        elsif SDL::MIX.music_playing?
+          SDL::MIX.pause_music
         else
-          SDL::Mixer.play_music(music)
+          SDL::MIX.play_music(music)
         end
       when .key_0?
-        SDL::Mixer.stop_music
+        SDL::MIX.stop_music
       end
       activekey << key
     end
