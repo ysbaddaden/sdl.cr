@@ -27,7 +27,6 @@ loop do
   case event = SDL::Event.wait
   when SDL::Event::Quit
     music.stop
-    SDL::MIX.close
     break
   when SDL::Event::Keyboard
     key = event.sym
