@@ -66,11 +66,9 @@ module SDL
       end
 
       def load(filename)
-        SDL::RWops.open(filename, "rb") do |rwops|
-          @sample = LibMIX.load_wav_rw(rwops, 1)
-          raise SDL::Error.new("Mix_LoadWAV_RW") unless @sample
-          @sample
-        end
+        rwops = LibSDL.rw_from_file(filename, "rb")
+        @sample = LibMIX.load_wav_rw(rwops, 1)
+        raise SDL::Error.new("Mix_LoadWAV_RW") unless @sample
       end
 
       def finalize
@@ -132,14 +130,8 @@ module SDL
       end
 
       def load(filename, type : Type? = nil)
-        SDL::RWops.open(filename, "rb") do |rwops|
-          if type
-            @music = load_music_type(rwops, type)
-          else
-            @music = load_music(rwops)
-          end
-          @music
-        end
+        rwops = LibSDL.rw_from_file(filename, "rb")
+        @music = type ? load_music_type(rwops, type) : load_music(rwops)
       end
 
       def finalize
