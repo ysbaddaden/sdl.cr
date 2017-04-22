@@ -116,4 +116,5 @@ lib LibMIX
   fun fade_in_music = Mix_FadeInMusic(music : Music*, loops : Int, ms : Int)
   fun fade_out_music = Mix_FadeOutMusic(ms : Int)
   fun music_volume = Mix_VolumeMusic(volume : Int) : Int
+  fun get_error = Mix_GetError() : Char*
 end

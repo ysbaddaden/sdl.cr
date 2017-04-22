@@ -37,6 +37,12 @@ module SDL
       ret
     end
 
+    def self.query_spec(freq = 44100, format = 0_u16, channels = 2)
+      audio_open_count = LibMIX.query_spec(freq, format, channels)
+      raise SDL::Error.new("Mix_QuerySpec: #{LibMIX.get_error}") if audio_open_count < 1
+      audio_open_count
+    end
+
     def self.close
       LibMIX.close_audio
     end
@@ -60,9 +66,11 @@ module SDL
       end
 
       def load(filename)
-        rwops = LibSDL.rw_from_file(filename, "rb")
-        @sample = LibMIX.load_wav_rw(rwops, 1)
-        raise SDL::Error.new("Mix_LoadWAV_RW") unless @sample
+        SDL::RWops.open(filename, "rb") do |rwops|
+          @sample = LibMIX.load_wav_rw(rwops, 1)
+          raise SDL::Error.new("Mix_LoadWAV_RW") unless @sample
+          @sample
+        end
       end
 
       def finalize
@@ -123,9 +131,15 @@ module SDL
         LibMIX.music_volume(-1)
       end
 
-      def load(filename, typ : Type? = nil)
-        rwops = LibSDL.rw_from_file(filename, "rb")
-        @music = typ ? load_music_type(rwops, typ) : load_music(rwops)
+      def load(filename, type : Type? = nil)
+        SDL::RWops.open(filename, "rb") do |rwops|
+          if type
+            @music = load_music_type(rwops, type)
+          else
+            @music = load_music(rwops)
+          end
+          @music
+        end
       end
 
       def finalize
