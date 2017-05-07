@@ -161,7 +161,7 @@ module SDL
 
     # Draw a single line between two `Point`.
     def draw_line(x1, y1, x2, y2)
-      ret = LibSDL.render_draw_line(self, x1, y2, x2, y2)
+      ret = LibSDL.render_draw_line(self, x1, y1, x2, y2)
       raise Error.new("SDL_RenderDrawLine") unless ret == 0
     end
 
