@@ -4,6 +4,7 @@ require "./hint"
 require "./renderer"
 require "./window"
 require "./screensaver"
+require "./color"
 
 module SDL
   class Error < Exception

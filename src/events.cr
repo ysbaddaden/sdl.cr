@@ -157,7 +157,7 @@ module SDL
         @event.touchId
       end
 
-      def touch_id
+      def finger_id
         @event.fingerId
       end
     end
@@ -202,10 +202,6 @@ module SDL
 
     struct Drop < Event
       @event : LibSDL::DropEvent
-
-      #def finalize
-      #  LibSDL.free(@event.file)
-      #end
 
       def filename
         String.new(@event.file)
@@ -273,7 +269,7 @@ module SDL
     # queue is empty.
     def self.poll
       case LibSDL.poll_event(out event)
-      when 1 then
+      when 1
         from(event)
       when -1
         raise Error.new("SDL_PollEvent")

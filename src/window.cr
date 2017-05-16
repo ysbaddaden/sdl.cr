@@ -5,11 +5,14 @@ module SDL
     alias Flags = LibSDL::WindowFlags
     alias Position = LibSDL::WindowPosition
 
-    def initialize(title, width, height,
+    getter width : Int32
+    getter height : Int32
+
+    def initialize(title, @width, @height,
                    x : Position = Position::UNDEFINED,
                    y : Position = Position::UNDEFINED,
                    flags : Flags = Flags::SHOWN)
-      @window = LibSDL.create_window(title, x, y, width, height, flags)
+      @window = LibSDL.create_window(title, x, y, @width, @height, flags)
     end
 
     def finalize
@@ -17,7 +20,11 @@ module SDL
     end
 
     def surface
-      @surface ||= Surface.new(LibSDL.get_window_surface(self))
+      @surface ||= begin
+        surface = LibSDL.get_window_surface(self)
+        raise Error.new("SDL_GetWindowSurface") unless surface
+        Surface.new(surface)
+      end
     end
 
     def flags

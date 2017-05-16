@@ -7,8 +7,9 @@ SDL::IMG.init(SDL::IMG::Init::PNG); at_exit { SDL::IMG.quit }
 window = SDL::Window.new("SDL tutorial", 640, 480)
 renderer = SDL::Renderer.new(window)
 
-image = SDL::IMG.load(File.join(__DIR__, "data", "full.png"), renderer)
-r = g = b = 255
+background = SDL::IMG.load(File.join(__DIR__, "data", "fadein.png"), renderer)
+modulated = SDL::IMG.load(File.join(__DIR__, "data", "fadeout.png"), renderer)
+a = 255
 
 loop do
   case event = SDL::Event.wait
@@ -16,30 +17,20 @@ loop do
     break
   when SDL::Event::Keyboard
     case event.sym
-    when .a?
-      r += 32
-    when .z?
-      g += 32
-    when .e?
-      b += 32
-    when .q?
-      r -= 32
-    when .s?
-      g -= 32
-    when .d?
-      b -= 32
-    end if event.keyup?
+    when .w? then a += 32
+    when .s? then a -= 32
+    end if event.keydown?
   end
 
-  r = r.clamp(0, 255)
-  g = g.clamp(0, 255)
-  b = b.clamp(0, 255)
+  a = a.clamp(0, 255)
 
   renderer.draw_color = {255, 255, 255, 255}
   renderer.clear
 
-  image.color_mod = {r, g, b}
-  renderer.copy(image)
+  renderer.copy(background)
+
+  modulated.alpha_mod = a
+  renderer.copy(modulated)
 
   renderer.present
 end
