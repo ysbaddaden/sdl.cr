@@ -30,14 +30,14 @@ module SDL
     end
 
     # This is required to initial SDL_Mixer. It must be called before using any other function, but AFTER SDL has been initialized.
-    def self.open(freq = 44100, format = 0_u16, channels = 2, sample_size = 2048)
+    def self.open(freq = 44100, format = 0, channels = 2, sample_size = 2048)
       format = format == 0 ? LibMIX::MIX_DEFAULT_FORMAT : format.to_u16
       ret = LibMIX.open_audio(freq, format, channels, sample_size)
       raise SDL::Error.new("Mix_OpenAudio") unless ret == 0
       ret
     end
 
-    def self.query_spec(freq = 44100, format = 0_u16, channels = 2)
+    def self.query_spec(freq = 44100, format = 0, channels = 2)
       audio_open_count = LibMIX.query_spec(freq, format, channels)
       raise SDL::Error.new("Mix_QuerySpec: #{LibMIX.get_error}") if audio_open_count < 1
       audio_open_count
@@ -51,7 +51,6 @@ module SDL
 
   module MIX
     class Sample
-      protected getter sample
 
       def self.decoder_count
         LibMIX.get_num_chunk_decoders
@@ -61,18 +60,18 @@ module SDL
         LibMIX.get_chunk_decoder(index)
       end
 
-      def initialize(filename = nil)
-        load filename if filename
-      end
-
-      def load(filename)
-        rwops = LibSDL.rw_from_file(filename, "rb")
-        @sample = LibMIX.load_wav_rw(rwops, 1)
+      def initialize(filename)
+        @rwops = SDL::RWops.new(filename, "rb")
+        @sample = LibMIX.load_wav_rw(@rwops, 1)
         raise SDL::Error.new("Mix_LoadWAV_RW") unless @sample
       end
 
       def finalize
-        LibMIX.free_chunk(sample)
+        LibMIX.free_chunk(@sample)
+      end
+
+      def to_unsafe
+        @sample
       end
     end
   end
@@ -81,8 +80,9 @@ module SDL
     class Music
       private getter music : Pointer(LibMIX::Music) | Nil
 
-      def initialize(filename = nil)
-        @music = filename ? load(filename) : nil
+      def initialize(filename = nil, type : Type?)
+        @rwops = SDL::RWops.new(filename, "rb")
+        @music = type ? load_music_type(@rwops, type) : load_music(@rwops)
       end
 
       def play(repeats = -1)
@@ -130,8 +130,6 @@ module SDL
       end
 
       def load(filename, type : Type? = nil)
-        rwops = LibSDL.rw_from_file(filename, "rb")
-        @music = type ? load_music_type(rwops, type) : load_music(rwops)
       end
 
       def finalize
@@ -141,13 +139,13 @@ module SDL
 
       private def load_music(rwops)
         audio = LibMIX.load_mus_rw(rwops, 1)
-        raise SDL::Error.new("Mix_LoadMUSType_RW") unless audio
+        raise SDL::Error.new("Mix_LoadMUS_RW") unless audio
         audio
       end
 
       private def load_music_type(rwops, typ)
         audio = LibMIX.load_mus_type_rw(rwops, typ.to_s, 1)
-        raise SDL::Error.new("Mix_LoadMUS_RW") unless audio
+        raise SDL::Error.new("Mix_LoadMUSType_RW") unless audio
         audio
       end
     end
@@ -156,18 +154,19 @@ module SDL
   module MIX
     class Channel
       property id
+      @@channel_count = 8
+      @@reserved_count = 0
 
       def initialize(@id = 1)
-        @@count ||= 8 unless @@count
       end
 
       def self.allocate_channels(count)
-        @@count = count
+        @@channel_count = count
         LibMIX.allocate_channels(count)
       end
 
       def self.reserve_channels(count)
-        @@reserved = count
+        @@reserved_count = count
         LibMIX.reserve_channels(count)
       end
 
@@ -196,11 +195,11 @@ module SDL
       end
 
       def self.channels
-        @@count || 0
+        @@channel_count
       end
 
       def self.reserved
-        @@reserved || 0
+        @@reserved_count
       end
 
       def self.volume=(volume)
@@ -215,16 +214,16 @@ module SDL
         LibMIX.cb_channel_finished(func)
       end
 
-      def play(smpl, repeats = 0)
-        LibMIX.play_channel(id, smpl.sample, repeats)
+      def play(sample : Sample, repeats = 0)
+        LibMIX.play_channel(id, sample, repeats)
       end
 
-      def play(smpl, repeats = 0, ticks = -1)
-        LibMIX.play_channel_timed(id, smpl.sample, repeats, ticks)
+      def play(sample : Sample, repeats = 0, ticks = -1)
+        LibMIX.play_channel_timed(id, sample, repeats, ticks)
       end
 
-      def fade_in(smpl : Sample, loops = 0, ms = 1000, ticks = -1)
-        LibMIX.fade_in_channel(id, smpl.sample, loops, ms, ticks)
+      def fade_in(sample : Sample, loops = 0, ms = 1000, ticks = -1)
+        LibMIX.fade_in_channel(id, sample, loops, ms, ticks)
       end
 
       def fade_out(ms = 1000)
@@ -250,6 +249,7 @@ module SDL
       def volume
         LibMIX.channel_volume(id, -1)
       end
+
     end
   end
 end
