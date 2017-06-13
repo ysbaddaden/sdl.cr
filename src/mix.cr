@@ -61,7 +61,9 @@ module SDL
       end
 
       def initialize(filename)
-        @rwops = SDL::RWops.new(filename, "rb")
+        # TODO: figure out why this throws Unrecognized file type (not WAVE) 
+        #@rwops = SDL::RWops.new(filename, "rb")
+        @rwops = LibSDL.rw_from_file(filename, "rb")
         @sample = LibMIX.load_wav_rw(@rwops, 1)
         raise SDL::Error.new("Mix_LoadWAV_RW") unless @sample
       end
@@ -81,7 +83,10 @@ module SDL
       private getter music : Pointer(LibMIX::Music) | Nil
 
       def initialize(filename, type : Type? = nil)
-        @rwops = SDL::RWops.new(filename, "rb")
+        # TODO: Figure out why this causes the music to not loop
+        # It plays the first beat, but then stops
+        #@rwops = SDL::RWops.new(filename, "rb")
+        @rwops = LibSDL.rw_from_file(filename, "rb")
         @music = type ? load_music_type(@rwops, type) : load_music(@rwops)
       end
 
