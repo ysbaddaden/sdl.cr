@@ -80,7 +80,7 @@ module SDL
     class Music
       private getter music : Pointer(LibMIX::Music) | Nil
 
-      def initialize(filename = nil, type : Type?)
+      def initialize(filename, type : Type? = nil)
         @rwops = SDL::RWops.new(filename, "rb")
         @music = type ? load_music_type(@rwops, type) : load_music(@rwops)
       end
@@ -170,16 +170,16 @@ module SDL
         LibMIX.reserve_channels(count)
       end
 
-      def self.play(smpl, repeats = 0)
-        LibMIX.play_channel(-1, smpl.sample, repeats)
+      def self.play(sample : Sample, repeats = 0)
+        LibMIX.play_channel(-1, sample, repeats)
       end
 
-      def self.play(smpl, repeats = 0, ticks = -1)
-        LibMIX.play_channel_timed(-1, smpl.sample, repeats, ticks)
+      def self.play(sample : Sample, repeats = 0, ticks = -1)
+        LibMIX.play_channel_timed(-1, sample, repeats, ticks)
       end
 
-      def self.fade_in(smpl : Sample, loops = 0, ms = 1000, ticks = -1)
-        LibMIX.fade_in_channel(-1, smpl.sample, loops, ms, ticks)
+      def self.fade_in(sample : Sample, loops = 0, ms = 1000, ticks = -1)
+        LibMIX.fade_in_channel(-1, sample, loops, ms, ticks)
       end
 
       def self.fade_out(ms = 1000)
