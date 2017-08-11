@@ -19,6 +19,7 @@ require "./events"
 require "./hint"
 require "./renderer"
 require "./window"
+require "./context.cr"
 require "./screensaver"
 require "./color"
 
