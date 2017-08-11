@@ -1,5 +1,5 @@
 
-require './window.cr'
+require "./window.cr"
 
 module SDL
 
@@ -13,7 +13,7 @@ module SDL
 
 
 		def self.load_library( path : String | Nil ) : Nil
-			return if @lib_loaded
+			return if @@lib_loaded
 
 			ret = 0
 
@@ -24,20 +24,20 @@ module SDL
 			end
 
 			raise Error.new( "SDL_GL_LoadLibrary" ) unless ret == 0
-			@lib_loaded = true
+			@@lib_loaded = true
 		end
 
 		def self.unload_library : Nil
-			return unless @lib_loaded
+			return unless @@lib_loaded
 
 			LibSDL.gl_unload_library
-			@lib_loaded = false
+			@@lib_loaded = false
 		end
 
 		# TODO: Maybe a generic function returning a `Proc` object ?
 		# not good enough for doing it right.
 		def self.get_proc_address( name : String ) : Void*
-			return Pointer.null unless @lib_loaded
+			raise Error.new( "OpenGL Library not loaded" ) unless @@lib_loaded
 
 			LibSDL.gl_get_proc_address( name )
 		end
