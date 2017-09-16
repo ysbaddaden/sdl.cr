@@ -17,6 +17,6 @@ loop do
     end
   end
 
-  window.surface.fill(255, 255, 255)
+  window.surface.fill(SDL::Rect[0, 0, 0, 0], 255, 255, 255)
   window.update
 end
