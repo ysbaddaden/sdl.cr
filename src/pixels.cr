@@ -24,5 +24,9 @@ module SDL
     def to_unsafe
       @pixel_format
     end
+
+    def inspect(io : IO)
+      @pixel_format.value.inspect(io)
+    end
   end
 end

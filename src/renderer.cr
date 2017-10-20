@@ -236,8 +236,11 @@ module SDL
       copy(Texture.from(surface, self), srcrect, dstrect, angle, center, flip)
     end
 
-    #def read_pixels
-    #end
+    def read_pixels(rect : Rect, format : PixelFormat, buffer : Bytes)
+      pitch = rect.w * format.bytes_per_pixel
+      ret = LibSDL.render_read_pixels(self, pointerof(rect), format.format, buffer, pitch)
+      raise SDL::Error.new("SDL_RenderReadPixels") unless ret == 0
+    end
 
     # Render the target texture to the screen.
     def present

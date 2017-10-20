@@ -24,7 +24,7 @@ lib LibSDL
   # alias Blit = (Surface*, Rect*, Surface*, Rect*) -> Int
 
   fun create_rgb_surface = SDL_CreateRGBSurface(flags : UInt32, width : Int, height : Int, depth : Int, r_mask : UInt32, g_mask : UInt32, b_mask : UInt32, a_mask : UInt32) : Surface*
-  fun create_rgb_surface_from = SDL_CreateRGBSurfaceFrom(pixels : Void*, flags : UInt32, width : Int, height : Int, depth : Int, pitch : Int, r_mask : UInt32, g_mask : UInt32, b_mask : UInt32, a_mask : UInt32) : Surface*
+  fun create_rgb_surface_from = SDL_CreateRGBSurfaceFrom(pixels : Void*, width : Int, height : Int, depth : Int, pitch : Int, r_mask : UInt32, g_mask : UInt32, b_mask : UInt32, a_mask : UInt32) : Surface*
   fun free_surface = SDL_FreeSurface(surface : Surface*)
   fun set_surface_palette = SDL_SetSurfacePalette(surface : Surface*, palette : Palette*) : Int
   fun lock_surface = SDL_LockSurface(surface : Surface*) : Int

@@ -17,6 +17,12 @@ module SDL
   end
 
   class Surface
+    def self.from(buffer : Bytes, width, height, format : PixelFormat)
+      surface = LibSDL.create_rgb_surface_from(buffer, width, height, format.bits_per_pixel, width * format.bytes_per_pixel, format.r_mask, format.g_mask, format.b_mask, format.a_mask)
+      raise SDL::Error.new("SDL_RenderReadPixels") unless surface
+      SDL::Surface.new(surface)
+    end
+
     def initialize(@surface : LibSDL::Surface*)
     end
 
@@ -178,8 +184,8 @@ module SDL
     end
 
     def save_bmp(path)
-      RWops.open(path, "rb") do |rwops|
-        ret = LibSDL.save_bmp_rw(surfce, rwops, 1)
+      RWops.open(path, "wb") do |rwops|
+        ret = LibSDL.save_bmp_rw(self, rwops, 1)
         raise Error.new("SDL_LoadBMP_RW") unless ret == 0
       end
     end

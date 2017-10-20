@@ -68,7 +68,7 @@ module SDL
     @freed = false
 
     protected def initialize(path : String, mode = "rb")
-      @file = File.open(path, "rb")
+      @file = File.open(path, mode)
       @context = LibSDL.alloc_rw
       @context.value.size = @@rw_file.value.size
       @context.value.seek = @@rw_file.value.seek
