@@ -35,6 +35,6 @@ lib LibSDL
   fun joystick_get_axis = SDL_JoystickGetAxis(joystick : Joystick*, axis : Int) : Int16
   fun joystick_get_hat = SDL_JoystickGetHat(joystick : Joystick*, hat : Int) : UInt8
   fun joystick_get_ball = SDL_JoystickGetBall(joystick : Joystick*, ball : Int, dx : Int*, dy : Int*) : Int
-  fun joystick_get_button = SDL_JoystickGetButton(joystick : Joystick*, button : Int)
+  fun joystick_get_button = SDL_JoystickGetButton(joystick : Joystick*, button : Int) : UInt8
   fun joystick_close = SDL_JoystickClose(joystick : Joystick*)
 end
