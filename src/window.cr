@@ -83,7 +83,7 @@ module SDL
     end
 
     def fullscreen=(value : Bool)
-      self.fullscreen = value ? LibSDL::WindowFlags::FULLSCREEN_DESKTOP : LibSDL::WindowFlags::WINDOW
+      self.fullscreen = value ? Fullscreen::FULLSCREEN_DESKTOP : Fullscreen::WINDOW
     end
 
     def grab=(value)
