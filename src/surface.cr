@@ -120,11 +120,11 @@ module SDL
 
     # Fill the whole surface with a RGB(A) color.
     def fill(r, g, b, a = nil)
-      fill(nil, r, g, b, a)
+      fill(Rect[0, 0, width, height], r, g, b, a)
     end
 
     # Fill a *rect* of the surface with a RGB(A) color.
-    def fill(rect, r, g, b, a = nil)
+    def fill(rect : Rect, r, g, b, a = nil)
       if a
         LibSDL.fill_rect(self, pointerof(rect), color(r, g, b, a))
       else
