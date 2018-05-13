@@ -12,11 +12,11 @@ lib LibSDL
   PRESSED  = 1
 
   enum EventType : UInt32
-    FIRSTEVENT =  0
+    FIRSTEVENT = 0
 
     # application
 
-    QUIT = 0x100
+    QUIT                      = 0x100
     APP_TERMINATING
     APP_LOW_MEMORY
     APP_WILL_ENTER_BACKGROUND
@@ -31,21 +31,21 @@ lib LibSDL
 
     # keyboard
 
-    KEYDOWN = 0x300
+    KEYDOWN      = 0x300
     KEYUP
     TEXT_EDITING
     TEXT_INPUT
 
     # mouse
 
-    MOUSE_MOTION = 0x400
+    MOUSE_MOTION      = 0x400
     MOUSE_BUTTON_DOWN
     MOUSE_BUTTON_UP
     MOUSE_WHEEL
 
     # joystick
 
-    JOY_AXIS_MOTION = 0x600
+    JOY_AXIS_MOTION    = 0x600
     JOY_BALL_MOTION
     JOY_HAT_MOTION
     JOY_BUTTON_DOWN
@@ -55,7 +55,7 @@ lib LibSDL
 
     # game controller
 
-    CONTROLLER_AXIS_MOTION = 0x650
+    CONTROLLER_AXIS_MOTION     = 0x650
     CONTROLLER_BUTTON_DOWN
     CONTROLLER_BUTTON_UP
     CONTROLLER_DEVICE_ADDED
@@ -64,7 +64,7 @@ lib LibSDL
 
     # touch
 
-    FINGER_DOWN = 0x700
+    FINGER_DOWN   = 0x700
     FINGER_UP
     FINGER_MOTION
 
@@ -78,7 +78,7 @@ lib LibSDL
     CLIPBOARD_UPDATE = 0x900
 
     # drag n' drop
-    DROP_FILE  = 0x1000
+    DROP_FILE = 0x1000
 
     # render
     RENDER_TARGETS_RESET = 0x2000
@@ -296,10 +296,10 @@ lib LibSDL
     timestamp : UInt32
   end
 
-  #struct OSEvent
+  # struct OSEvent
   #  type : EventType
   #  timestamp : UInt32
-  #end
+  # end
 
   struct UserEvent
     type : EventType
@@ -352,7 +352,7 @@ lib LibSDL
     GET  = 2
   end
 
-  fun pump_events = SDL_PumpEvents()
+  fun pump_events = SDL_PumpEvents
   fun peep_events = SDL_PeepEvents(events : Event*, numevents : Int, action : EventAction, minType : EventType, maxType : EventType) : Int
   fun has_event = SDL_HasEvent(type : EventType) : Bool
   fun has_events = SDL_HasEvents(minType : EventType, maxType : EventType) : Bool
@@ -371,9 +371,9 @@ lib LibSDL
   fun filter_events = SDL_FilterEvents(filter : EventFilter*, userdata : Void*)
 
   QUERY   = -1
-  IGNORE  = 0
-  DISABLE = 0
-  ENABLE  = 1
+  IGNORE  =  0
+  DISABLE =  0
+  ENABLE  =  1
   fun event_state = SDL_EventState(type : EventType, state : Int) : UInt8
   # SDL_GetEventState(type) = SDL_EventState(type, QUERY)
 

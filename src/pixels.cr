@@ -17,9 +17,9 @@ module SDL
       @pixel_format.value.bitsPerPixel
     end
 
-    #def palette
+    # def palette
     #  Palette.new(@pixel_format.value.palette)
-    #end
+    # end
 
     def to_unsafe
       @pixel_format

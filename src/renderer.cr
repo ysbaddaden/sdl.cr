@@ -15,8 +15,8 @@ module SDL
       end
 
       # TODO: Renderer::Info#texture_formats
-      #def texture_formats
-      #end
+      # def texture_formats
+      # end
     end
 
     alias Flags = LibSDL::RendererFlags

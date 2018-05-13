@@ -14,20 +14,20 @@ lib LibSDL
   type Window = Void
 
   enum WindowFlags : UInt32
-    FULLSCREEN = 0x00000001
-    OPENGL = 0x00000002
-    SHOWN = 0x00000004
-    HIDDEN = 0x00000008
-    BORDERLESS = 0x00000010
-    RESIZABLE = 0x00000020
-    MINIMIZED = 0x00000040
-    MAXIMIZED = 0x00000080
-    INPUT_GRABBED = 0x00000100
-    INPUT_FOCUS = 0x00000200
-    MOUSE_FOCUS = 0x00000400
+    FULLSCREEN         = 0x00000001
+    OPENGL             = 0x00000002
+    SHOWN              = 0x00000004
+    HIDDEN             = 0x00000008
+    BORDERLESS         = 0x00000010
+    RESIZABLE          = 0x00000020
+    MINIMIZED          = 0x00000040
+    MAXIMIZED          = 0x00000080
+    INPUT_GRABBED      = 0x00000100
+    INPUT_FOCUS        = 0x00000200
+    MOUSE_FOCUS        = 0x00000400
     FULLSCREEN_DESKTOP = 0x00001001 # WINDOW_FULLSCREEN | 0x00001000
-    FOREIGN = 0x00000800
-    ALLOW_HIGHDPI = 0x00002000
+    FOREIGN            = 0x00000800
+    ALLOW_HIGHDPI      = 0x00002000
   end
 
   enum WindowPosition
@@ -83,9 +83,9 @@ lib LibSDL
   end
 
   enum GLprofile
-    PROFILE_CORE           = 0x0001
-    PROFILE_COMPATIBILITY  = 0x0002
-    PROFILE_ES             = 0x0004
+    PROFILE_CORE          = 0x0001
+    PROFILE_COMPATIBILITY = 0x0002
+    PROFILE_ES            = 0x0004
   end
 
   enum GLcontextFlag
@@ -95,12 +95,12 @@ lib LibSDL
     RESET_ISOLATION_FLAG    = 0x0008
   end
 
-  fun get_num_video_drivers = SDL_GetNumVideoDrivers() : Int
+  fun get_num_video_drivers = SDL_GetNumVideoDrivers : Int
   fun get_video_driver = SDL_GetVideoDriver(index : Int) : Char*
   fun video_init = SDL_VideoInit(driver_name : Char*) : Int
-  fun video_quit = SDL_VideoQuit()
-  fun get_current_video_driver = SDL_GetCurrentVideoDriver() : Char*
-  fun get_num_video_displays = SDL_GetNumVideoDisplays() : Int
+  fun video_quit = SDL_VideoQuit
+  fun get_current_video_driver = SDL_GetCurrentVideoDriver : Char*
+  fun get_num_video_displays = SDL_GetNumVideoDisplays : Int
   fun get_display_name = SDL_GetDisplayName(displayIndex : Int) : Char*
   fun get_display_bounds = SDL_GetDisplayBounds(displayIndex : Int, rect : Rect*) : Int
   fun get_num_display_modes = SDL_GetNumDisplayModes(displayIndex : Int) : Int
@@ -150,26 +150,26 @@ lib LibSDL
   fun get_window_gamma_ramp = SDL_GetWindowGammaRamp(window : Window*, red : UInt16*, green : UInt16*, blue : UInt16*) : Int
   fun destroy_window = SDL_DestroyWindow(window : Window*)
 
-  fun is_screen_saver_enabled = SDL_IsScreenSaverEnabled() : Bool
-  fun enable_screen_saver = SDL_EnableScreenSaver()
-  fun disable_screen_saver = SDL_DisableScreenSaver()
+  fun is_screen_saver_enabled = SDL_IsScreenSaverEnabled : Bool
+  fun enable_screen_saver = SDL_EnableScreenSaver
+  fun disable_screen_saver = SDL_DisableScreenSaver
 
   # OpenGL support functions
 
   fun gl_load_library = SDL_GL_LoadLibrary(path : Char*) : Int
   fun gl_get_proc_address = SDL_GL_GetProcAddress(proc : Char*) : Void*
-  fun gl_unload_library = SDL_GL_UnloadLibrary()
+  fun gl_unload_library = SDL_GL_UnloadLibrary
   fun gl_extension_supported = SDL_GL_ExtensionSupported(extension : Char*) : Bool
-  fun gl_reset_attributes = SDL_GL_ResetAttributes()
+  fun gl_reset_attributes = SDL_GL_ResetAttributes
   fun gl_set_attribute = SDL_GL_SetAttribute(attr : GLattr, value : Int) : Int
   fun gl_get_attribute = SDL_GL_GetAttribute(attr : GLattr, value : Int*) : Int
   fun gl_create_context = SDL_GL_CreateContext(window : Window*) : GLContext
   fun gl_make_current = SDL_GL_MakeCurrent(window : Window*, context : GLContext) : Int
-  fun gl_get_current_window = SDL_GL_GetCurrentWindow() : Window*
-  fun gl_get_current_context = SDL_GL_GetCurrentContext() : GLContext
+  fun gl_get_current_window = SDL_GL_GetCurrentWindow : Window*
+  fun gl_get_current_context = SDL_GL_GetCurrentContext : GLContext
   fun gl_get_drawable_size = SDL_GL_GetDrawableSize(window : Window*, w : Int*, h : Int*) : Int
   fun gl_set_swap_interval = SDL_GL_SetSwapInterval(interval : Int) : Int
-  fun gl_get_swap_interval = SDL_GL_GetSwapInterval() : Int
+  fun gl_get_swap_interval = SDL_GL_GetSwapInterval : Int
   fun gl_swap_window = SDL_GL_SwapWindow(window : Window*)
   fun gl_delete_context = SDL_GL_DeleteContext(context : GLContext)
 end

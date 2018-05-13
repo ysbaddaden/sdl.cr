@@ -41,7 +41,7 @@ module SDL
     # `SDL::Surface`.
     def self.load(path, type : Type? = nil)
       SDL::RWops.open(path, "rb") do |rwops|
-       if type
+        if type
           surface = LibIMG.load_typed_rw(rwops, 1, type.to_s)
           raise Error.new("IMG_LoadTyped_RW") unless surface
         else
@@ -56,7 +56,7 @@ module SDL
     # `SDL::Texture` for *renderer*.
     def self.load(path, renderer : SDL::Renderer, type : Type? = nil)
       SDL::RWops.open(path, "rb") do |rwops|
-       if type
+        if type
           texture = LibIMG.load_texture_typed_rw(renderer, rwops, 1, type.to_s)
           raise Error.new("IMG_LoadTextureTyped_RW") unless texture
         else
@@ -85,7 +85,7 @@ module SDL
       end
     {% end %}
 
-    #class File
+    # class File
     #  def initialize(path)
     #    @rwops = SDL::RWops.new(path, "rb")
     #  end
@@ -110,6 +110,6 @@ module SDL
     #      LibIMG.is_{{type.downcase.id}}(@rwops) == 1
     #    end
     #  {% end %}
-    #end
+    # end
   end
 end

@@ -14,9 +14,9 @@ lib LibIMG
   alias RWops = LibSDL::RWops
 
   VERSION = {% `pkg-config SDL2_image --modversion`.strip %}
-  MAJOR = {% VERSION.split('.')[0] %}
-  MINOR = {% VERSION.split('.')[1] %}
-  PATCH = {% VERSION.split('.')[2] %}
+  MAJOR   = {% VERSION.split('.')[0] %}
+  MINOR   = {% VERSION.split('.')[1] %}
+  PATCH   = {% VERSION.split('.')[2] %}
 
   @[Flags]
   enum Init
@@ -27,7 +27,7 @@ lib LibIMG
   end
 
   fun init = IMG_Init(flags : Init) : Int
-  fun quit = IMG_Quit()
+  fun quit = IMG_Quit
 
   fun load = IMG_Load(file : Char*) : Surface*
   fun load_rw = IMG_Load_RW(src : RWops*, freesrc : Int) : Surface*

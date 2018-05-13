@@ -1,8 +1,8 @@
 lib LibSDL
   enum MessageBoxFlags : UInt32
-    ERROR        = 0x00000010
-    WARNING      = 0x00000020
-    INFORMATION  = 0x00000040
+    ERROR       = 0x00000010
+    WARNING     = 0x00000020
+    INFORMATION = 0x00000040
   end
 
   enum MessageBoxButtonFlags : UInt32
@@ -16,7 +16,7 @@ lib LibSDL
     text : Char*
   end
 
-  struct  MessageBoxColor
+  struct MessageBoxColor
     r : UInt8
     g : UInt8
     b : UInt8

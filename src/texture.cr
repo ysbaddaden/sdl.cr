@@ -62,17 +62,17 @@ module SDL
       blend_mode
     end
 
-    #def update
-    #end
+    # def update
+    # end
 
-    #def update_yuv
-    #end
+    # def update_yuv
+    # end
 
-    #def lock
-    #end
+    # def lock
+    # end
 
-    #def unlock
-    #end
+    # def unlock
+    # end
 
     # Binds an OpenGL/ES/ES2 texture to the current texture, for use with OpenGL
     # instructions when Rendering OpenGL primitives directly.

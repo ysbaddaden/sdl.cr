@@ -2,7 +2,7 @@ lib LibSDL
   type GameController = Void
 
   enum GameControllerAxis
-    INVALID = -1
+    INVALID      = -1
     LEFTX
     LEFTY
     RIGHTX
@@ -13,7 +13,7 @@ lib LibSDL
   end
 
   enum GameControllerButton
-    BUTTON_INVALID = -1
+    BUTTON_INVALID       = -1
     BUTTON_A
     BUTTON_B
     BUTTON_X
@@ -33,7 +33,7 @@ lib LibSDL
   end
 
   enum GameControllerBindType
-    NONE = 0
+    NONE   = 0
     BUTTON
     AXIS
     HAT
@@ -69,7 +69,7 @@ lib LibSDL
   fun game_controller_get_joystick = SDL_GameControllerGetJoystick(gamecontroller : GameController*) : Joystick*
   fun game_controller_event_state = SDL_GameControllerEventState(gamecontroller : GameController*) : Int
   fun game_controller_event_state = SDL_GameControllerEventState(gamecontroller : GameController*) : Int
-  fun game_controller_update = SDL_GameControllerUpdate()
+  fun game_controller_update = SDL_GameControllerUpdate
 
   fun game_controller_get_axis_from_string = SDL_GameControllerGetAxisFromString(pchString : Char*) : GameControllerAxis
   fun game_controller_get_string_for_axis = SDL_GameControllerGetStringForAxis(axis : GameControllerAxis) : Char*

@@ -7,9 +7,9 @@ lib LibTTF
   alias Long = LibC::Long
 
   VERSION = {% `pkg-config SDL2_ttf --modversion`.strip %}
-  MAJOR = {% VERSION.split('.')[0] %}
-  MINOR = {% VERSION.split('.')[1] %}
-  PATCH = {% VERSION.split('.')[2] %}
+  MAJOR   = {% VERSION.split('.')[0] %}
+  MINOR   = {% VERSION.split('.')[1] %}
+  PATCH   = {% VERSION.split('.')[2] %}
 
   enum Style
     NORMAL        = 0x00
@@ -21,10 +21,10 @@ lib LibTTF
 
   type Font = Void
 
-  #fun linked_version = TTF_Linked_Version() : LibSDL::Version
-  fun init = TTF_Init() : Int
-  fun was_init = TTF_WasInit() : Int
-  fun quit = TTF_Quit()
+  # fun linked_version = TTF_Linked_Version() : LibSDL::Version
+  fun init = TTF_Init : Int
+  fun was_init = TTF_WasInit : Int
+  fun quit = TTF_Quit
 
   fun open_font = TTF_OpenFont(file : Char*, ptsize : Int) : Font*
   fun open_font_index = TTF_OpenFontIndex(file : Char*, ptsize : Int, index : Long) : Font*
@@ -55,15 +55,15 @@ lib LibTTF
   fun render_text_solid = TTF_RenderText_Solid(font : Font*, text : Char*, fg : LibSDL::Color) : LibSDL::Surface*
   fun render_utf8_solid = TTF_RenderUTF8_Solid(font : Font*, text : Char*, fg : LibSDL::Color) : LibSDL::Surface*
   fun render_unicode_solid = TTF_RenderUNICODE_Solid(font : Font*, text : UInt16*, fg : LibSDL::Color) : LibSDL::Surface*
-  fun render_glyph_solid = TTF_RenderGlyph_Solid(font : Font*, ch : UInt16, fg : LibSDL::Color): LibSDL::Surface*
+  fun render_glyph_solid = TTF_RenderGlyph_Solid(font : Font*, ch : UInt16, fg : LibSDL::Color) : LibSDL::Surface*
 
   fun render_text_shaded = TTF_RenderText_Shaded(font : Font*, text : Char*, fg : LibSDL::Color, bg : LibSDL::Color) : LibSDL::Surface*
   fun render_utf8_shaded = TTF_RenderUTF8_Shaded(font : Font*, text : Char*, fg : LibSDL::Color, bg : LibSDL::Color) : LibSDL::Surface*
   fun render_unicode_shaded = TTF_RenderUNICODE_Shaded(font : Font*, text : UInt16*, fg : LibSDL::Color, bg : LibSDL::Color) : LibSDL::Surface*
   fun render_glyph_shaded = TTF_RenderGlyph_Shaded(font : Font*, ch : UInt16, fg : LibSDL::Color, bg : LibSDL::Color) : LibSDL::Surface*
 
-  fun render_text_blended  = TTF_RenderText_Blended(font : Font*, text : Char*, fg : LibSDL::Color) : LibSDL::Surface*
-  fun render_utf8_blended  = TTF_RenderUTF8_Blended(font : Font*, text : Char*, fg : LibSDL::Color) : LibSDL::Surface*
+  fun render_text_blended = TTF_RenderText_Blended(font : Font*, text : Char*, fg : LibSDL::Color) : LibSDL::Surface*
+  fun render_utf8_blended = TTF_RenderUTF8_Blended(font : Font*, text : Char*, fg : LibSDL::Color) : LibSDL::Surface*
   fun render_unicode_blended = TTF_RenderUNICODE_Blended(font : Font*, text : UInt16*, fg : LibSDL::Color) : LibSDL::Surface*
   fun render_glyph_blended = TTF_RenderGlyph_Blended(font : Font*, ch : UInt16, fg : LibSDL::Color) : LibSDL::Surface*
 

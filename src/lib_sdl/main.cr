@@ -7,7 +7,7 @@ lib LibSDL
     end
   {% end %}
 
-  fun set_main_ready = SDL_SetMainReady()
+  fun set_main_ready = SDL_SetMainReady
 
   {% if flag?(:windows) %}
     fun SDL_RegisterApp(name : Char*, style : UInt32, hInst : Void*) : Int

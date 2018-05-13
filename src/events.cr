@@ -280,21 +280,18 @@ module SDL
       case event.type
       when .window_event?
         Window.new(event.window)
-
       when .keydown?, .keyup?
         Keyboard.new(event.key)
       when .text_editing?
         TextEditing.new(event.edit)
       when .text_input?
         TextInput.new(event.text)
-
       when .mouse_motion?
         MouseMotion.new(event.motion)
       when .mouse_button_down?, .mouse_button_up?
         MouseButton.new(event.button)
       when .mouse_wheel?
         MouseWheel.new(event.wheel)
-
       when .joy_axis_motion?
         JoyAxis.new(event.jaxis)
       when .joy_ball_motion?
@@ -305,24 +302,20 @@ module SDL
         JoyButton.new(event.jbutton)
       when .joy_device_added?, .joy_device_removed?
         JoyDevice.new(event.jdevice)
-
       when .controller_axis_motion?
         ControllerAxis.new(event.caxis)
       when .controller_button_down?, .controller_button_up?
         ControllerButton.new(event.cbutton)
       when .controller_device_added?, .controller_device_removed?, .controller_device_remapped?
         ControllerDevice.new(event.cdevice)
-
       when .finger_down?, .finger_up?, .finger_motion?
         TouchFinger.new(event.tfinger)
       when .dollar_gesture?, .dollar_record?
         DollarGesture.new(event.dgesture)
       when .multi_gesture?
         MultiGesture.new(event.mgesture)
-
       when .drop_file?
         Drop.new(event.drop)
-
       when .quit?
         Quit.new(event.quit)
       when .sys_wm_event?

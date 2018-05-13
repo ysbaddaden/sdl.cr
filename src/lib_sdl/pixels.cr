@@ -1,6 +1,6 @@
 lib LibSDL
-  ALPHA_OPAQUE = 255
-  ALPHA_TRANSPARENT = 0
+  ALPHA_OPAQUE      = 255
+  ALPHA_TRANSPARENT =   0
 
   enum PixelType
     UNKNOWN
@@ -57,18 +57,18 @@ lib LibSDL
     L1010102
   end
 
-  #macro DEFINE_PIXELFOURCC(A, B, C, D)
+  # macro DEFINE_PIXELFOURCC(A, B, C, D)
   #  {{A}}.to_u32 << 0 |
   #  {{B}}.to_u32 << 8 |
   #  {{C}}.to_u32 << 16 |
   #  {{D}}.to_u32 << 24
-  #end
+  # end
 
-  #macro DEFINE_PIXELFORMAT(type, order, layout, bits, bytes)
+  # macro DEFINE_PIXELFORMAT(type, order, layout, bits, bytes)
   #  ((1 << 28) | ({{type}} << 24) | ({{order}} << 20) | ({{layout}} << 16) | ({{bits}} << 8) | ({{bytes}} << 0))
-  #end
+  # end
 
-  #enum PixelFormatEnum : UInt32
+  # enum PixelFormatEnum : UInt32
   #  UNKNOWN
   #  INDEX1LSB = SDL_DEFINE_PIXELFORMAT(SDL_PIXELTYPE_INDEX1, SDL_BITMAPORDER_4321, 0, 1, 0)
   #  INDEX1MSB = SDL_DEFINE_PIXELFORMAT(SDL_PIXELTYPE_INDEX1, SDL_BITMAPORDER_1234, 0, 1, 0)
@@ -105,7 +105,7 @@ lib LibSDL
   #  YUY2 = SDL_DEFINE_PIXELFOURCC('Y', 'U', 'Y', '2')
   #  UYVY = SDL_DEFINE_PIXELFOURCC('U', 'Y', 'V', 'Y')
   #  YVYU = SDL_DEFINE_PIXELFOURCC('Y', 'V', 'Y', 'U')
-  #end
+  # end
 
   alias Color = SDL::Color
 
@@ -126,10 +126,10 @@ lib LibSDL
     g_mask : UInt32
     b_mask : UInt32
     a_mask : UInt32
-    r_loss  : UInt8
-    g_loss  : UInt8
-    b_loss  : UInt8
-    a_loss  : UInt8
+    r_loss : UInt8
+    g_loss : UInt8
+    b_loss : UInt8
+    a_loss : UInt8
     r_shift : UInt8
     g_shift : UInt8
     b_shift : UInt8

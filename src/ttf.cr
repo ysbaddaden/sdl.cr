@@ -220,7 +220,7 @@ module SDL
 
       # Renders text using this font as an `SDL::Surface` using the blended
       # wrapped mode.
-      #def render_blended_wrapper(text : String, color, wrap_length, ascii = false)
+      # def render_blended_wrapper(text : String, color, wrap_length, ascii = false)
       #  if ascii
       #    surface = LibTTF.render_text_blended_wrapped(self, text, color, wrap_length)
       #    raise Error.new("TTF_RenderText_Blended_Wrapped") unless surface
@@ -229,7 +229,7 @@ module SDL
       #    raise Error.new("TTF_RenderUTF8_Blended_Wrapped") unless surface
       #  end
       #  SDL::Surface.new(surface)
-      #end
+      # end
 
       def close
         @closed = true
