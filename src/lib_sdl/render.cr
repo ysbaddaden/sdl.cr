@@ -4,9 +4,9 @@ require "./blend_mode"
 
 lib LibSDL
   enum RendererFlags : UInt32
-    SOFTWARE = 0x00000001
-    ACCELERATED = 0x00000002
-    PRESENTVSYNC = 0x00000004
+    SOFTWARE      = 0x00000001
+    ACCELERATED   = 0x00000002
+    PRESENTVSYNC  = 0x00000004
     TARGETTEXTURE = 0x00000008
   end
 
@@ -26,21 +26,21 @@ lib LibSDL
   end
 
   enum TextureModulate : UInt32
-    NONE = 0x00000000
+    NONE  = 0x00000000
     COLOR = 0x00000001
     ALPHA = 0x00000002
   end
 
   enum RendererFlip : UInt32
-    NONE = 0x00000000
+    NONE       = 0x00000000
     HORIZONTAL = 0x00000001
-    VERTICAL = 0x00000002
+    VERTICAL   = 0x00000002
   end
 
   type Renderer = Void
   type Texture = Void
 
-  fun get_num_render_drivers = SDL_GetNumRenderDrivers() : Int
+  fun get_num_render_drivers = SDL_GetNumRenderDrivers : Int
   fun get_render_driver_info = SDL_GetRenderDriverInfo(index : Int, info : RendererInfo*) : Int
   fun create_window_and_renderer = SDL_CreateWindowAndRenderer(width : Int, height : Int, window_flags : UInt32, window : Window**, renderer : Renderer**) : Int
   fun create_renderer = SDL_CreateRenderer(window : Window*, index : Int, flags : UInt32) : Renderer*
@@ -80,7 +80,7 @@ lib LibSDL
   fun render_draw_point = SDL_RenderDrawPoint(renderer : Renderer*, x : Int, y : Int) : Int
   fun render_draw_points = SDL_RenderDrawPoints(renderer : Renderer*, points : Point*, count : Int) : Int
   fun render_draw_line = SDL_RenderDrawLine(renderer : Renderer*, x1 : Int, y1 : Int, x2 : Int, y2 : Int) : Int
-  fun render_draw_lines = SDL_RenderDrawLines(renderer : Renderer*, points : Point*, count : Int): Int
+  fun render_draw_lines = SDL_RenderDrawLines(renderer : Renderer*, points : Point*, count : Int) : Int
   fun render_draw_rect = SDL_RenderDrawRect(renderer : Renderer*, rect : Rect*) : Int
   fun render_draw_rects = SDL_RenderDrawRects(renderer : Renderer*, rects : Rect*, count : Int) : Int
   fun render_fill_rect = SDL_RenderFillRect(renderer : Renderer*, rect : Rect*) : Int

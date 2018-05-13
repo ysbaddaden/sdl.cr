@@ -1,6 +1,5 @@
 module SDL
   class RWops
-
     @@rw_file = LibSDL.alloc_rw
 
     @@rw_file.value.size = ->(context : LibSDL::RWops*) {
@@ -13,7 +12,7 @@ module SDL
            when LibSDL::RW_SEEK_SET then IO::Seek::Set
            when LibSDL::RW_SEEK_CUR then IO::Seek::Current
            when LibSDL::RW_SEEK_END then IO::Seek::End
-           else raise "can't seek: invalid whence value"
+           else                          raise "can't seek: invalid whence value"
            end
       file = Box(RWops).unbox(context.value.hidden.unknown.data1).file
       file.seek(offset.to_i32, wh).tell.to_i64

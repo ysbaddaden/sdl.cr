@@ -1,7 +1,7 @@
 lib LibSDL
-  NONSHAPEABLE_WINDOW = -1
+  NONSHAPEABLE_WINDOW    = -1
   INVALID_SHAPE_ARGUMENT = -2
-  WINDOW_LACKS_SHAPE = -3
+  WINDOW_LACKS_SHAPE     = -3
 
   enum ShapeMode
     Default

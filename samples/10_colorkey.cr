@@ -19,7 +19,7 @@ image.color_key = {0, 255, 255}
 foo = SDL::Texture.from(image, renderer)
 
 # image has a transparent background color (SDL_image sets the colorkey):
-#foo = IMG.load(File.join(__DIR__, "data", "foo2.png"), renderer)
+# foo = IMG.load(File.join(__DIR__, "data", "foo2.png"), renderer)
 
 loop do
   case event = SDL::Event.poll

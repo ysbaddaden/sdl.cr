@@ -16,7 +16,7 @@ lib LibSDL
     data : UInt8[16]
   end
 
-  fun num_joysticks = SDL_NumJoysticks() : Int
+  fun num_joysticks = SDL_NumJoysticks : Int
   fun joystick_name_for_index = SDL_JoystickNameForIndex(device_index : Int) : Char*
   fun joystick_open = SDL_JoystickOpen(device_index : Int) : Joystick*
   fun joystick_name = SDL_JoystickName(joystick : Joystick*) : Char*
@@ -30,7 +30,7 @@ lib LibSDL
   fun joystick_num_balls = SDL_JoystickNumBalls(joystick : Joystick*) : Int
   fun joystick_num_hats = SDL_JoystickNumHats(joystick : Joystick*) : Int
   fun joystick_num_buttons = SDL_JoystickNumButtons(joystick : Joystick*) : Int
-  fun joystick_update = SDL_JoystickUpdate()
+  fun joystick_update = SDL_JoystickUpdate
   fun joystick_event_state = SDL_JoystickEventState(state : Int) : Int
   fun joystick_get_axis = SDL_JoystickGetAxis(joystick : Joystick*, axis : Int) : Int16
   fun joystick_get_hat = SDL_JoystickGetHat(joystick : Joystick*, hat : Int) : UInt8

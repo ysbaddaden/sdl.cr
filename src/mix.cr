@@ -5,7 +5,7 @@ require "./mix/music"
 
 module SDL
   module Mix
-    MAX_VOLUME = LibMix::MIN_MAX_VOLUME
+    MAX_VOLUME     = LibMix::MIN_MAX_VOLUME
     DEFAULT_FORMAT = LibMix::Mix_DEFAULT_FORMAT
 
     alias Init = LibMix::Init

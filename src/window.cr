@@ -71,8 +71,8 @@ module SDL
     {% end %}
 
     enum Fullscreen
-      WINDOW = 0
-      FULLSCREEN = LibSDL::WindowFlags::FULLSCREEN
+      WINDOW             = 0
+      FULLSCREEN         = LibSDL::WindowFlags::FULLSCREEN
       FULLSCREEN_DESKTOP = LibSDL::WindowFlags::FULLSCREEN_DESKTOP
     end
 

@@ -6,13 +6,13 @@ lib LibMix
   alias Char = LibC::Char
   alias RWops = LibSDL::RWops
 
-  VERSION         = {% `pkg-config SDL2_mixer --modversion`.strip %}
-  MAJOR           = {% VERSION.split('.')[0] %}
-  MINOR           = {% VERSION.split('.')[1] %}
-  PATCH           = {% VERSION.split('.')[2] %}
-  MIN_MAX_VOLUME  = 128
+  VERSION            = {% `pkg-config SDL2_mixer --modversion`.strip %}
+  MAJOR              = {% VERSION.split('.')[0] %}
+  MINOR              = {% VERSION.split('.')[1] %}
+  PATCH              = {% VERSION.split('.')[2] %}
+  MIN_MAX_VOLUME     = 128
   Mix_DEFAULT_FORMAT = LibSDL::AUDIO_S16LSB
-  
+
   @[Flags]
   enum Init
     FLAC       = 0x00000001
@@ -53,6 +53,7 @@ lib LibMix
     alen : UInt32
     volume : UInt8
   end
+
   alias Chunk = Mix_Chunk
 
   struct WAVStream
@@ -64,23 +65,24 @@ lib LibMix
   union Data
     cmd : MusicCMD*
     wave : WAVStream*
-    #mp3 : SMPEG*
-    #ogg : OGG_music*
+    # mp3 : SMPEG*
+    # ogg : OGG_music*
   end
 
   struct Mix_Music
     type : MusicType
     data : Data
   end
+
   alias Music = Mix_Music
 
   fun init = Mix_Init(flags : Init) : Int
-  fun quit = Mix_Quit()
+  fun quit = Mix_Quit
 
   fun open_audio = Mix_OpenAudio(frequency : Int, format : UInt16, channels : Int, chunksize : Int) : Int
-  fun close_audio = Mix_CloseAudio()
+  fun close_audio = Mix_CloseAudio
   fun open_audio_device = Mix_OpenAudioDevice(frequency : Int, format : UInt16) : Int
-  
+
   fun allocate_channels = Mix_AllocateChannels(numchans : Int) : Int
   fun query_spec = Mix_QuerySpec(frequency : Int*, format : UInt16*, channels : Int*) : Int
   fun load_wav_rw = Mix_LoadWAV_RW(src : RWops*, freesrc : Int) : Chunk*
@@ -91,12 +93,12 @@ lib LibMix
   fun quick_load_raw = Mix_QuickLoad_RAW(mem : UInt8*, len : UInt32) : Chunk*
   fun free_chunk = Mix_FreeChunk(chunk : Chunk*)
   fun free_music = Mix_FreeMusic(music : Music*)
-  fun get_num_chunk_decoders = Mix_GetNumChunkDecoders() : Int
+  fun get_num_chunk_decoders = Mix_GetNumChunkDecoders : Int
   fun get_chunk_decoder = Mix_GetChunkDecoder(index : Int) : Char*
-  fun get_num_music_decoders = Mix_GetNumMusicDecoders() : Int
+  fun get_num_music_decoders = Mix_GetNumMusicDecoders : Int
   fun get_music_decoder = Mix_GetMusicDecoder(index : Int) : Char*
   fun get_music_type = Mix_GetMusicType(music : Music*) : MusicType
-  fun get_music_hook_data = Mix_GetMusicHookData()
+  fun get_music_hook_data = Mix_GetMusicHookData
   fun play_channel = Mix_PlayChannel(channel : Int, chunk : Chunk*, loops : Int) : Int
   fun play_channel_timed = Mix_PlayChannelTimed(channel : Int, chunk : Chunk*, loops : Int, ticks : Int) : Int
   fun fade_in_channel = Mix_FadeInChannelTimed(channel : Int, chunk : Chunk*, loops : Int, ticks : Int, dur : Int) : Int
@@ -107,14 +109,14 @@ lib LibMix
   fun channel_volume = Mix_Volume(channel : Int, volume : Int) : Int
   fun channel_paused = Mix_Paused(channel : Int) : Int
   fun play_music = Mix_PlayMusic(music : Music*, loops : Int) : Int
-  fun music_playing = Mix_PlayingMusic() : Int
-  fun music_paused = Mix_PausedMusic() : Int
-  fun rewind_music = Mix_RewindMusic()
-  fun resume_music = Mix_ResumeMusic()
-  fun pause_music = Mix_PauseMusic()
-  fun halt_music = Mix_HaltMusic() : Int
+  fun music_playing = Mix_PlayingMusic : Int
+  fun music_paused = Mix_PausedMusic : Int
+  fun rewind_music = Mix_RewindMusic
+  fun resume_music = Mix_ResumeMusic
+  fun pause_music = Mix_PauseMusic
+  fun halt_music = Mix_HaltMusic : Int
   fun fade_in_music = Mix_FadeInMusic(music : Music*, loops : Int, ms : Int)
   fun fade_out_music = Mix_FadeOutMusic(ms : Int)
   fun music_volume = Mix_VolumeMusic(volume : Int) : Int
-  fun get_error = Mix_GetError() : Char*
+  fun get_error = Mix_GetError : Char*
 end

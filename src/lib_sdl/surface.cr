@@ -1,5 +1,5 @@
 lib LibSDL
-  SWSURFACE = 0
+  SWSURFACE =          0
   PREALLOC  = 0x00000001
   RLEACCEL  = 0x00000002
   DONTFREE  = 0x00000004
@@ -31,7 +31,7 @@ lib LibSDL
   fun unlock_surface = SDL_UnlockSurface(surface : Surface*)
 
   fun load_bmp_rw = SDL_LoadBMP_RW(src : RWops*, freesrc : Int) : Surface*
-  fun save_bmp_rw = SDL_SaveBMP_RW (surface : Surface*, dst : RWops*, freedst : Int) : Int
+  fun save_bmp_rw = SDL_SaveBMP_RW(surface : Surface*, dst : RWops*, freedst : Int) : Int
 
   fun set_color_key = SDL_SetColorKey(surface : Surface*, flag : Int, key : UInt32) : Int
   fun get_color_key = SDL_GetColorKey(surface : Surface*, key : UInt32*) : Int
@@ -51,12 +51,12 @@ lib LibSDL
   fun fill_rect = SDL_FillRect(dst : Surface*, rect : Rect*, color : UInt32) : Int
   fun fill_rects = SDL_FillRects(dst : Surface*, rects : Rect*, count : Int, color : UInt32) : Int
 
-  #alias blit_surface = SDL_UpperBlit
+  # alias blit_surface = SDL_UpperBlit
   fun upper_blit = SDL_UpperBlit(src : Surface*, srcrect : Rect*, dst : Surface*, dstrect : Rect*) : Int
   fun lower_blit = SDL_LowerBlit(src : Surface*, srcrect : Rect*, dst : Surface*, dstrect : Rect*) : Int
   fun soft_stretch = SDL_SoftStretch(src : Surface*, srcrect : Rect*, dst : Surface*, dstrect : Rect*) : Int
 
-  #alias blit_scaled = SDL_UpperBlitScaled
+  # alias blit_scaled = SDL_UpperBlitScaled
   fun upper_blit_scaled = SDL_UpperBlitScaled(src : Surface*, srcrect : Rect*, dst : Surface*, dstrect : Rect*) : Int
   fun lower_blit_scaled = SDL_LowerBlitScaled(src : Surface*, srcrect : Rect*, dst : Surface*, dstrect : Rect*) : Int
 end
