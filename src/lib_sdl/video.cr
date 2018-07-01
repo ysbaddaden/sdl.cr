@@ -28,6 +28,11 @@ lib LibSDL
     FULLSCREEN_DESKTOP = 0x00001001 # WINDOW_FULLSCREEN | 0x00001000
     FOREIGN = 0x00000800
     ALLOW_HIGHDPI = 0x00002000
+    ALWAYS_ON_TOP = 0x00008000 # x11 only
+    SKIP_TASKBAR = 0x00010000 # x11 only
+    UTILITY = 0x00020000 # x11 only
+    TOOLTIP = 0x00040000 # x11 only
+    POPUP_MENU = 0x00080000 # x11 only
   end
 
   enum WindowPosition
@@ -95,6 +100,31 @@ lib LibSDL
     RESET_ISOLATION_FLAG    = 0x0008
   end
 
+  struct SDL_Version
+    major : UInt8
+    minor : UInt8
+    patch : UInt8
+  end
+
+  enum SDL_SYSType
+    SDL_SYSWM_UNKNOWN
+    SDL_SYSWM_WINDOWS
+    SDL_SYSWM_X11
+    SDL_SYSWM_DIRECTFB
+    SDL_SYSWM_COCOA
+  end
+
+  struct WM_x11
+    display : Void*
+    window : UInt64
+  end
+
+  struct SDL_WMInfo
+    version : SDL_Version
+    subsystem : SDL_SYSType
+    info : WM_x11 # TODO: Add support for other WM's
+  end
+
   fun get_num_video_drivers = SDL_GetNumVideoDrivers() : Int
   fun get_video_driver = SDL_GetVideoDriver(index : Int) : Char*
   fun video_init = SDL_VideoInit(driver_name : Char*) : Int
@@ -118,6 +148,7 @@ lib LibSDL
   fun get_window_id = SDL_GetWindowID(window : Window*) : UInt32
   fun get_window_from_id = SDL_GetWindowFromID(id : UInt32) : Window*
   fun get_window_flags = SDL_GetWindowFlags(window : Window*) : WindowFlags
+  fun get_window_wm_info = SDL_GetWindowWMInfo(window : Window*, info : SDL_WMInfo*) : Bool
   fun set_window_title = SDL_SetWindowTitle(window : Window*, title : Char*)
   fun get_window_title = SDL_GetWindowTitle(window : Window*) : Char*
   fun set_window_icon = SDL_SetWindowIcon(window : Window*, icon : Surface*)
