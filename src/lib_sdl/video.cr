@@ -112,17 +112,28 @@ lib LibSDL
     SDL_SYSWM_X11
     SDL_SYSWM_DIRECTFB
     SDL_SYSWM_COCOA
+    SDL_SYSWM_UIKIT
+    SDL_SYSWM_WAYLAND
+    SDL_SYSWM_MIR
+    SDL_SYSWM_WINRT
+    SDL_SYSWM_ANDROID
+    SDL_SYSWM_VIVANTE
+    SDL_SYSWM_OS2
   end
 
-  struct WM_x11
+  struct SDL_WMInfoX11
     display : Void*
-    window : UInt64
+    window : UInt32
+  end
+
+  union SDL_WMInfoUnion
+    x11 : SDL_WMInfoX11
   end
 
   struct SDL_WMInfo
     version : SDL_Version
     subsystem : SDL_SYSType
-    info : WM_x11 # TODO: Add support for other WM's
+    info : SDL_WMInfoUnion
   end
 
   fun get_num_video_drivers = SDL_GetNumVideoDrivers() : Int
