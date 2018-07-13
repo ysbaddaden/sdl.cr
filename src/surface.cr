@@ -123,13 +123,14 @@ module SDL
       fill(nil, r, g, b, a)
     end
 
+    # Fill the whole surface with a RGB(A) color.
+    def fill(rect : Nil, r, g, b, a = nil)
+      LibSDL.fill_rect(self, nil, color(r, g, b, a))
+    end
+
     # Fill a *rect* of the surface with a RGB(A) color.
-    def fill(rect, r, g, b, a = nil)
-      if a
-        LibSDL.fill_rect(self, pointerof(rect), color(r, g, b, a))
-      else
-        LibSDL.fill_rect(self, pointerof(rect), color(r, g, b))
-      end
+    def fill(rect : SDL::Rect, r, g, b, a = nil)
+      LibSDL.fill_rect(self, pointerof(rect), color(r, g, b, a))
     end
 
     # Saves the Surface as a BMP image.
