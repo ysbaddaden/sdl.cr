@@ -30,7 +30,7 @@ lib LibSDL
   BUTTON_X2MASK = 1 << (BUTTON_X2 - 1)
 
   fun get_mouse_focus = SDL_GetMouseFocus() : Window*
-  fun get_mouse_state = SDL_GetMouseState(x : Int, y : Int) : UInt32
+  fun get_mouse_state = SDL_GetMouseState(x : Int*, y : Int*) : UInt32
   fun get_relative_mouse_state = SDL_GetRelativeMouseState(x : Int*, y : Int*) : UInt32
   fun warp_mouse_in_window = SDL_WarpMouseInWindow(window : Window*, x : Int, y : Int)
   fun set_relative_mouse_mode = SDL_SetRelativeMouseMode(enabled : Bool) : Int
