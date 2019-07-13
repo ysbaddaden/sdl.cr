@@ -144,6 +144,7 @@ lib LibSDL
   fun get_num_video_displays = SDL_GetNumVideoDisplays() : Int
   fun get_display_name = SDL_GetDisplayName(displayIndex : Int) : Char*
   fun get_display_bounds = SDL_GetDisplayBounds(displayIndex : Int, rect : Rect*) : Int
+  fun get_display_usable_bounds = SDL_GetDisplayUsableBounds(displayIndex : Int, rect : Rect*) : Int
   fun get_num_display_modes = SDL_GetNumDisplayModes(displayIndex : Int) : Int
   fun get_display_mode = SDL_GetDisplayMode(displayIndex : Int, modeIndex : Int, mode : DisplayMode*) : Int
   fun get_desktop_display_mode = SDL_GetDesktopDisplayMode(displayIndex : Int, mode : DisplayMode*) : Int
