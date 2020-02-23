@@ -23,7 +23,7 @@ loop do
 
   x = (window.width - surface.width) / 2
   y = (window.height - surface.height) / 2
-  renderer.copy(surface, dstrect: SDL::Rect[x, y, surface.width, surface.height])
+  renderer.copy(surface, dstrect: SDL::Rect[x.to_i, y.to_i, surface.width, surface.height])
 
   renderer.present
 end
