@@ -22,6 +22,6 @@ lib LibSDL
   fun is_text_input_active = SDL_IsTextInputActive() : Bool
   fun stop_text_input = SDL_StopTextInput()
   fun set_text_input_rect = SDL_SetTextInputRect(rect : Rect*)
-  fun has_screen_keywboard_support = SDL_HasScreenKeyboardSupport() : Bool
+  fun has_screen_keyboard_support = SDL_HasScreenKeyboardSupport() : Bool
   fun is_screen_keyboard_shown = SDL_IsScreenKeyboardShown(window : Window*) : Bool
 end
