@@ -258,6 +258,7 @@ lib LibSDL
     SLEEP = Scancode::SLEEP | SDLK_SCANCODE_MASK
   end
 
+  @[Flags]
   enum Keymod : UInt16
     NONE = 0x0000
     LSHIFT = 0x0001
