@@ -13,6 +13,7 @@ lib LibSDL
 
   type Window = Void
 
+  @[Flags]
   enum WindowFlags : UInt32
     FULLSCREEN = 0x00000001
     OPENGL = 0x00000002
