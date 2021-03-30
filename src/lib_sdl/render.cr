@@ -3,6 +3,7 @@ require "./video"
 require "./blend_mode"
 
 lib LibSDL
+  @[Flags]
   enum RendererFlags : UInt32
     SOFTWARE = 0x00000001
     ACCELERATED = 0x00000002
