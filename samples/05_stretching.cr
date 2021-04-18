@@ -1,4 +1,4 @@
-require "../sdl"
+require "../src/sdl"
 
 def load_bmp(name, window)
   path = File.join(__DIR__, "data", name)
