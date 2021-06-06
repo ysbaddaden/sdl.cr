@@ -409,7 +409,7 @@ module SDL
 
     # :nodoc:
     def to_unsafe
-      @event
+      pointerof(@event)
     end
   end
 end
