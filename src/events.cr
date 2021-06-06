@@ -4,31 +4,37 @@ module SDL
 
     module PressRelease
       def pressed?
-        @event.state == LibSDL::PRESSED
+        _event.state == LibSDL::PRESSED
       end
 
       def released?
-        @event.state == LibSDL::RELEASED
+        _event.state == LibSDL::RELEASED
       end
     end
 
     struct Window < Event
-      @event : LibSDL::WindowEvent
-      delegate event, data1, data2, to: @event
+      protected def _event
+        @event.window
+      end
+
+      delegate event, data1, data2, to: _event
 
       def window_id
-        @event.windowID
+        _event.windowID
       end
     end
 
     struct Keyboard < Event
       include PressRelease
 
-      @event : LibSDL::KeyboardEvent
-      delegate repeat, keysym, to: @event
+      protected def _event
+        @event.key
+      end
+
+      delegate repeat, keysym, to: _event
 
       def window_id
-        @event.windowID
+        _event.windowID
       end
 
       def keyup?
@@ -40,184 +46,239 @@ module SDL
       end
 
       def mod
-        @event.keysym.mod
+        _event.keysym.mod
       end
 
       def sym
-        @event.keysym.sym
+        _event.keysym.sym
       end
     end
 
     struct TextEditing < Event
-      @event : LibSDL::TextEditingEvent
-      delegate text, start, length, to: @event
+      protected def _event
+        @event.edit
+      end
+
+      delegate text, start, length, to: _event
 
       def window_id
-        @event.windowID
+        _event.windowID
       end
     end
 
     struct TextInput < Event
-      @event : LibSDL::TextInputEvent
-      delegate text, to: @event
+      protected def _event
+        @event.text
+      end
+
+      delegate text, to: _event
 
       def window_id
-        @event.windowID
+        _event.windowID
       end
     end
 
     struct MouseMotion < Event
       include PressRelease
 
-      @event : LibSDL::MouseMotionEvent
-      delegate which, x, y, xrel, yrel, to: @event
+      protected def _event
+        @event.motion
+      end
+
+      delegate which, x, y, xrel, yrel, to: _event
 
       def window_id
-        @event.windowID
+        _event.windowID
       end
     end
 
     struct MouseButton < Event
       include PressRelease
 
-      @event : LibSDL::MouseButtonEvent
-      delegate which, button, clicks, x, y, to: @event
+      protected def _event
+        @event.button
+      end
+
+      delegate which, button, clicks, x, y, to: _event
 
       def window_id
-        @event.windowID
+        _event.windowID
       end
     end
 
     struct MouseWheel < Event
-      @event : LibSDL::MouseWheelEvent
-      delegate which, x, y, to: @event
+      protected def _event
+        @event.wheel
+      end
+
+      delegate which, x, y, to: _event
 
       def window_id
-        @event.windowID
+        _event.windowID
       end
     end
 
     struct JoyAxis < Event
-      @event : LibSDL::JoyAxisEvent
-      delegate which, x, y, to: @event
+      protected def _event
+        @event.jaxis
+      end
+
+      delegate which, x, y, to: _event
     end
 
     struct JoyBall < Event
-      @event : LibSDL::JoyBallEvent
-      delegate which, ball, to: @event
+      protected def _event
+        @event.jball
+      end
+
+      delegate which, ball, to: _event
 
       def xrel
-        @event.xrel.to_i
+        _event.xrel.to_i
       end
 
       def yrel
-        @event.yrel.to_i
+        _event.yrel.to_i
       end
     end
 
     struct JoyHat < Event
-      @event : LibSDL::JoyHatEvent
-      delegate which, hat, value, to: @event
+      protected def _event
+        @event.jhat
+      end
+
+      delegate which, hat, value, to: _event
     end
 
     struct JoyButton < Event
       include PressRelease
 
-      @event : LibSDL::JoyButtonEvent
-      delegate which, button, to: @event
+      protected def _event
+        @event.jbutton
+      end
+
+      delegate which, button, to: _event
     end
 
     struct JoyDevice < Event
-      @event : LibSDL::JoyDeviceEvent
-      delegate which, to: @event
+      protected def _event
+        @event.jdevice
+      end
+
+      delegate which, to: _event
     end
 
     struct ControllerAxis < Event
-      @event : LibSDL::ControllerAxisEvent
-      delegate which, axis, value, to: @event
+      protected def _event
+        @event.caxis
+      end
+
+      delegate which, axis, value, to: _event
     end
 
     struct ControllerButton < Event
       include PressRelease
 
-      @event : LibSDL::ControllerButtonEvent
-      delegate which, button, to: @event
+      protected def _event
+        @event.cbutton
+      end
+
+      delegate which, button, to: _event
     end
 
     struct ControllerDevice < Event
-      @event : LibSDL::ControllerDeviceEvent
-      delegate which, to: @event
+      protected def _event
+        @event.jdevice
+      end
+
+      delegate which, to: _event
     end
 
     struct TouchFinger < Event
-      @event : LibSDL::TouchFingerEvent
-      delegate x, y, dx, dy, pressure, to: @event
+      protected def _event
+        @event.tfinger
+      end
+
+      delegate x, y, dx, dy, pressure, to: _event
 
       def touch_id
-        @event.touchId
+        _event.touchId
       end
 
       def finger_id
-        @event.fingerId
+        _event.fingerId
       end
     end
 
     struct DollarGesture < Event
-      @event : LibSDL::DollarGestureEvent
-      delegate error, x, y, to: @event
+      protected def _event
+        @event.dgesture
+      end
+
+      delegate error, x, y, to: _event
 
       def touch_id
-        @event.touchId
+        _event.touchId
       end
 
       def gesture_id
-        @event.gestureId
+        _event.gestureId
       end
 
       def num_fingers
-        @event.numFingers
+        _event.numFingers
       end
     end
 
     struct MultiGesture < Event
-      @event : LibSDL::MultiGestureEvent
-      delegate x, y, to: @event
+      protected def _event
+        @event.mgesture
+      end
+
+      delegate x, y, to: _event
 
       def touch_id
-        @event.touchId
+        _event.touchId
       end
 
       def d_theta
-        @event.dTheta
+        _event.dTheta
       end
 
       def d_dist
-        @event.dDist
+        _event.dDist
       end
 
       def num_fingers
-        @event.numFingers
+        _event.numFingers
       end
     end
 
     struct Drop < Event
-      @event : LibSDL::DropEvent
+      protected def _event
+        @event.drop
+      end
 
       def filename
-        String.new(@event.file)
+        String.new(_event.file)
       end
     end
 
     struct Quit < Event
-      @event : LibSDL::QuitEvent
+      protected def _event
+        @event.quit
+      end
     end
 
     struct User < Event
-      @event : LibSDL::UserEvent
-      delegate code, data1, data2, to: @event
+      protected def _event
+        @event.user
+      end
+
+      delegate code, data1, data2, to: _event
 
       def window_id
-        @event.windowID
+        _event.windowID
       end
 
       def push
@@ -227,8 +288,11 @@ module SDL
     end
 
     struct SysWM < Event
-      @event : LibSDL::SysWMEvent
-      delegate msg, to: @event
+      protected def _event
+        @event.syswm
+      end
+
+      delegate msg, to: _event
     end
 
     # Ignores an event type. They will no longer be pushed to the queue event.
@@ -279,68 +343,68 @@ module SDL
     protected def self.from(event : LibSDL::Event)
       case event.type
       when .window_event?
-        Window.new(event.window)
+        Window.new(event)
 
       when .keydown?, .keyup?
-        Keyboard.new(event.key)
+        Keyboard.new(event)
       when .text_editing?
-        TextEditing.new(event.edit)
+        TextEditing.new(event)
       when .text_input?
-        TextInput.new(event.text)
+        TextInput.new(event)
 
       when .mouse_motion?
-        MouseMotion.new(event.motion)
+        MouseMotion.new(event)
       when .mouse_button_down?, .mouse_button_up?
-        MouseButton.new(event.button)
+        MouseButton.new(event)
       when .mouse_wheel?
-        MouseWheel.new(event.wheel)
+        MouseWheel.new(event)
 
       when .joy_axis_motion?
-        JoyAxis.new(event.jaxis)
+        JoyAxis.new(event)
       when .joy_ball_motion?
-        JoyBall.new(event.jball)
+        JoyBall.new(event)
       when .joy_hat_motion?
-        JoyHat.new(event.jhat)
+        JoyHat.new(event)
       when .joy_button_down?, .joy_button_up?
-        JoyButton.new(event.jbutton)
+        JoyButton.new(event)
       when .joy_device_added?, .joy_device_removed?
-        JoyDevice.new(event.jdevice)
+        JoyDevice.new(event)
 
       when .controller_axis_motion?
-        ControllerAxis.new(event.caxis)
+        ControllerAxis.new(event)
       when .controller_button_down?, .controller_button_up?
-        ControllerButton.new(event.cbutton)
+        ControllerButton.new(event)
       when .controller_device_added?, .controller_device_removed?, .controller_device_remapped?
-        ControllerDevice.new(event.cdevice)
+        ControllerDevice.new(event)
 
       when .finger_down?, .finger_up?, .finger_motion?
-        TouchFinger.new(event.tfinger)
+        TouchFinger.new(event)
       when .dollar_gesture?, .dollar_record?
-        DollarGesture.new(event.dgesture)
+        DollarGesture.new(event)
       when .multi_gesture?
-        MultiGesture.new(event.mgesture)
+        MultiGesture.new(event)
 
       when .drop_file?
-        Drop.new(event.drop)
+        Drop.new(event)
 
       when .quit?
-        Quit.new(event.quit)
+        Quit.new(event)
       when .sys_wm_event?
-        SysWM.new(event.syswm)
+        SysWM.new(event)
       else
-        User.new(event.user)
+        User.new(event)
       end
     end
 
-    def initialize(@event)
+    def initialize(@event : LibSDL::Event)
     end
 
     def type
-      @event.type
+      _event.type
     end
 
     def timestamp
-      @event.timestamp
+      _event.timestamp
     end
 
     # :nodoc:
