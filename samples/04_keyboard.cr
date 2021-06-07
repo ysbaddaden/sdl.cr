@@ -1,4 +1,4 @@
-require "../sdl"
+require "../src/sdl"
 
 SDL.init(SDL::Init::VIDEO)
 at_exit { SDL.quit }
