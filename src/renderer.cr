@@ -71,7 +71,7 @@ module SDL
     end
 
     def viewport=(rect)
-      ret = LibSDL.render_set_viewport(self, pointerof(rect))
+      ret = LibSDL.render_set_viewport(self, SDL.pointer_or_null(rect, SDL::Rect))
       raise Error.new("SDL_RenderSetViewport") unless ret == 0
       rect
     end
@@ -82,13 +82,13 @@ module SDL
     end
 
     def clip_rect=(rect)
-      ret = LibSDL.render_set_clip_rect(self, pointerof(rect))
+      ret = LibSDL.render_set_clip_rect(self, SDL.pointer_or_null(rect, SDL::Rect))
       raise Error.new("SDL_RenderSetClipRect") unless ret == 0
       rect
     end
 
     def clip_rect
-      LibSDL.render_get_cli_rect(self, out rect)
+      LibSDL.render_get_clip_rect(self, out rect)
       rect
     end
 
