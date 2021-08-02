@@ -57,6 +57,8 @@ lib LibSDL
     FOCUS_GAINED
     FOCUS_LOST
     CLOSE
+    TAKE_FOCUS
+    HIT_TEST
   end
 
   type GLContext = Void*
