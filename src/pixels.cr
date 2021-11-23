@@ -14,12 +14,12 @@ module SDL
     end
 
     def bytes_per_pixel
-      @pixel_format.value.bitsPerPixel
+      @pixel_format.value.bytesPerPixel
     end
 
-    #def palette
+    # def palette
     #  Palette.new(@pixel_format.value.palette)
-    #end
+    # end
 
     def to_unsafe
       @pixel_format
