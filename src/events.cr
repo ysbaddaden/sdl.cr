@@ -52,6 +52,10 @@ module SDL
       def sym
         _event.keysym.sym
       end
+
+      def scancode
+        _event.keysym.scancode
+      end
     end
 
     struct TextEditing < Event
@@ -344,21 +348,18 @@ module SDL
       case event.type
       when .window_event?
         Window.new(event)
-
       when .keydown?, .keyup?
         Keyboard.new(event)
       when .text_editing?
         TextEditing.new(event)
       when .text_input?
         TextInput.new(event)
-
       when .mouse_motion?
         MouseMotion.new(event)
       when .mouse_button_down?, .mouse_button_up?
         MouseButton.new(event)
       when .mouse_wheel?
         MouseWheel.new(event)
-
       when .joy_axis_motion?
         JoyAxis.new(event)
       when .joy_ball_motion?
@@ -369,24 +370,20 @@ module SDL
         JoyButton.new(event)
       when .joy_device_added?, .joy_device_removed?
         JoyDevice.new(event)
-
       when .controller_axis_motion?
         ControllerAxis.new(event)
       when .controller_button_down?, .controller_button_up?
         ControllerButton.new(event)
       when .controller_device_added?, .controller_device_removed?, .controller_device_remapped?
         ControllerDevice.new(event)
-
       when .finger_down?, .finger_up?, .finger_motion?
         TouchFinger.new(event)
       when .dollar_gesture?, .dollar_record?
         DollarGesture.new(event)
       when .multi_gesture?
         MultiGesture.new(event)
-
       when .drop_file?
         Drop.new(event)
-
       when .quit?
         Quit.new(event)
       when .sys_wm_event?
