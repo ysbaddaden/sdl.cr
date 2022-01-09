@@ -3,6 +3,10 @@ module SDL
     def initialize(@texture : LibSDL::Texture*)
     end
 
+    def initialize(renderer : Renderer | LibSDL::Renderer, width, height, pixel_format = LibSDL::PixelFormatEnum::RGBA8888, texture_access = LibSDL::TextureAccess::STREAMING)
+      @texture = LibSDL.create_texture(renderer, LibSDL::PixelFormatEnum::RGBA8888, LibSDL::TextureAccess::STREAMING, width, height)
+    end
+
     def finalize
       LibSDL.destroy_texture(@texture)
     end
@@ -62,17 +66,26 @@ module SDL
       blend_mode
     end
 
-    #def update
-    #end
+    # def update
+    # end
 
-    #def update_yuv
-    #end
+    # def update_yuv
+    # end
 
-    #def lock
-    #end
+    def lock
+      begin
+        pitch = uninitialized Int32
+        pixels_pointer = uninitialized Void*
+        ret = LibSDL.lock_texture(@texture, nil, pointerof(pixels_pointer), pointerof(pitch))
+        raise Error.new("SDL_LockTexture") unless ret == 0
+        yield Slice.new(Pointer(UInt32).new(pixels_pointer.address), width * height), pitch
+      ensure
+        LibSDL.unlock_texture(@texture)
+      end
+    end
 
-    #def unlock
-    #end
+    # def unlock
+    # end
 
     # Binds an OpenGL/ES/ES2 texture to the current texture, for use with OpenGL
     # instructions when Rendering OpenGL primitives directly.
