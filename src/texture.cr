@@ -4,7 +4,7 @@ module SDL
     end
 
     def initialize(renderer : Renderer | LibSDL::Renderer, width, height, pixel_format = LibSDL::PixelFormatEnum::RGBA8888, texture_access = LibSDL::TextureAccess::STREAMING)
-      @texture = LibSDL.create_texture(renderer, LibSDL::PixelFormatEnum::RGBA8888, LibSDL::TextureAccess::STREAMING, width, height)
+      @texture = LibSDL.create_texture(renderer, pixel_format, texture_access, width, height)
     end
 
     def finalize
@@ -72,20 +72,25 @@ module SDL
     # def update_yuv
     # end
 
-    def lock
-      begin
-        pitch = uninitialized Int32
-        pixels_pointer = uninitialized Void*
-        ret = LibSDL.lock_texture(@texture, nil, pointerof(pixels_pointer), pointerof(pitch))
-        raise Error.new("SDL_LockTexture") unless ret == 0
-        yield Slice.new(Pointer(UInt32).new(pixels_pointer.address), width * height), pitch
-      ensure
-        LibSDL.unlock_texture(@texture)
-      end
+    def lock : {Slice(UInt32), Int32}
+      pitch = uninitialized Int32
+      pixels_pointer = uninitialized Void*
+      ret = LibSDL.lock_texture(self, nil, pointerof(pixels_pointer), pointerof(pitch))
+      raise Error.new("SDL_LockTexture") unless ret == 0
+      {Slice.new(Pointer(UInt32).new(pixels_pointer.address), width * height), pitch}
     end
 
-    # def unlock
-    # end
+    # Locks a texture and yields a buffer of pixels for write only changes along with the pitch the data
+    def lock(& : Slice(UInt32), Int32 ->) : Nil
+      buffer, pitch = lock
+      yield buffer, pitch
+    ensure
+      unlock
+    end
+
+    def unlock
+      LibSDL.unlock_texture(self)
+    end
 
     # Binds an OpenGL/ES/ES2 texture to the current texture, for use with OpenGL
     # instructions when Rendering OpenGL primitives directly.
