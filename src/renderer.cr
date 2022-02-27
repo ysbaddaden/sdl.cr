@@ -15,8 +15,8 @@ module SDL
       end
 
       # TODO: Renderer::Info#texture_formats
-      #def texture_formats
-      #end
+      # def texture_formats
+      # end
     end
 
     alias Flags = LibSDL::RendererFlags
@@ -34,7 +34,7 @@ module SDL
     def info
       ret = LibSDL.get_renderer_info(self, out info)
       raise Error.new("SDL_GetRendererInfo") unless ret == 0
-      Info.new(info.value)
+      Info.new(info)
     end
 
     def output_size
