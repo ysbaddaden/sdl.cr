@@ -139,11 +139,14 @@ module SDL
 
       # Returns the `{width, height}` of *text* if rendered with the current font.
       def size_of(text : String, ascii = false)
+        width = uninitialized LibC::Int
+        height = uninitialized LibC::Int
+
         if ascii
-          ret = LibTTF.size_ascii(self, text, out width, out height)
+          ret = LibTTF.size_text(self, text, pointerof(width), pointerof(height))
           raise Error.new("TTF_SizeText") unless ret == 0
         else
-          ret = LibTTF.size_utf8(self, text, out width, out height)
+          ret = LibTTF.size_utf8(self, text, pointerof(width), pointerof(height))
           raise Error.new("TTF_SizeUTF8") unless ret == 0
         end
         {width, height}
@@ -151,11 +154,13 @@ module SDL
 
       # Returns the `width` of *text* if rendered with the current font.
       def width_of(text : String, ascii = false)
+        width = uninitialized LibC::Int
+
         if ascii
-          ret = LibTTF.size_ascii(self, text, out width, nil)
+          ret = LibTTF.size_text(self, text, pointerof(width), nil)
           raise Error.new("TTF_SizeText") unless ret == 0
         else
-          ret = LibTTF.size_utf8(self, text, out width, nil)
+          ret = LibTTF.size_utf8(self, text, pointerof(width), nil)
           raise Error.new("TTF_SizeUTF8") unless ret == 0
         end
         width
@@ -163,11 +168,13 @@ module SDL
 
       # Returns the `height` of *text* if rendered with the current font.
       def height_of(text : String, ascii = false)
+        height = uninitialized LibC::Int
+
         if ascii
-          ret = LibTTF.size_ascii(self, text, nil, out height)
+          ret = LibTTF.size_text(self, text, nil, pointerof(height))
           raise Error.new("TTF_SizeText") unless ret == 0
         else
-          ret = LibTTF.size_utf8(self, text, nil, out height)
+          ret = LibTTF.size_utf8(self, text, nil, pointerof(height))
           raise Error.new("TTF_SizeUTF8") unless ret == 0
         end
         height
