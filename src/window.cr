@@ -121,6 +121,12 @@ module SDL
       LibSDL.update_window_surface(self)
     end
 
+    def display_index
+      ret = LibSDL.get_window_display_index(self)
+      raise Error.new("SDL_GetWindowDisplayIndex") unless ret >= 0
+      ret
+    end
+
     def to_unsafe
       @window
     end

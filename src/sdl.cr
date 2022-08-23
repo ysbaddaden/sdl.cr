@@ -66,4 +66,16 @@ module SDL
       LibSDL.quit
     end
   end
+
+  def self.get_desktop_display_mode(display_index : Int32) : LibSDL::DisplayMode
+    ret = LibSDL.get_desktop_display_mode(display_index, out mode)
+    raise Error.new("SDL_GetDesktopDisplayMode") unless ret == 0
+    mode
+  end
+
+  def self.get_current_display_mode(display_index : Int32) : LibSDL::DisplayMode
+    ret = LibSDL.get_current_display_mode(display_index, out mode)
+    raise Error.new("SDL_GetCurrentDisplayMode") unless ret == 0
+    mode
+  end
 end
