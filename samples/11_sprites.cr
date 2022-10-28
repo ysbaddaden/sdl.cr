@@ -7,7 +7,7 @@ SDL::IMG.init(SDL::IMG::Init::PNG); at_exit { SDL::IMG.quit }
 window = SDL::Window.new("SDL tutorial", 640, 480)
 renderer = SDL::Renderer.new(window)
 
-image = SDL::IMG.load(File.join(__DIR__, "data", "sprites.png"))
+image = SDL::IMG.load(File.join(__DIR__, "data", "dots.png"))
 image.color_key = {0, 255, 255}
 sprite = SDL::Texture.from(image, renderer)
 
