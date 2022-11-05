@@ -66,7 +66,7 @@ loop do
     left = event.axis == trigger_axis[:left] ? (0xffff * 1 // 2) : 0
     right = event.axis == trigger_axis[:right] ? (0xffff * 1 // 2) : 0
 
-    # rumble the triggers at 50% for left and right for 500ms based on which trigger was pressed
+    # rumble the triggers at 50% for left and right for 250ms based on which trigger was pressed
     controller.rumble_triggers(left: left.to_u16, right: right.to_u16, duration_ms: 250)
   end
 
