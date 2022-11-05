@@ -3,6 +3,7 @@ require "../src/image"
 require "../src/mix"
 
 SDL.init(SDL::Init::VIDEO | SDL::Init::AUDIO); at_exit { SDL.quit }
+SDL::IMG.init(SDL::IMG::Init::PNG); at_exit { SDL::IMG.quit }
 SDL::Mix.init(SDL::Mix::Init::FLAC); at_exit { SDL::Mix.quit }
 SDL::Mix.open
 
@@ -19,7 +20,7 @@ channels = {} of String => SDL::Mix::Channel
 end
 
 window = SDL::Window.new("SDL Tutorial", 640, 480)
-png = SDL::IMG.load(File.join(__DIR__, "data", "prompt.png"))
+png = SDL::IMG.load(File.join(DATA_DIR, "prompt.png"))
 png = png.convert(window.surface)
 activekey = [] of LibSDL::Keycode
 
