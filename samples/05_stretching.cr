@@ -1,4 +1,4 @@
-require "../sdl"
+require "../src/sdl"
 
 def load_bmp(name, window)
   path = File.join(__DIR__, "data", name)
@@ -21,6 +21,6 @@ loop do
     end
   end
 
-  bmp.blit_scaled(window.surface, dstrect: SDL::Rect[20, 20, 600, 440])
+  bmp.blit_scaled(window.surface, dstrect: SDL::Rect[0, 0, window.width, window.height])
   window.update
 end
