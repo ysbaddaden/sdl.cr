@@ -19,7 +19,7 @@ start_ticks = Time.monotonic.total_milliseconds
 frames = 0
 
 # Lock FPS at 60
-capped_ticks_per_frame = 60
+locked_fps = 1000 / 60
 
 loop do
   cap_ticks = Time.monotonic.total_milliseconds
@@ -45,9 +45,10 @@ loop do
   renderer.present
 
   frames += 1
-
   frame_ticks = Time.monotonic.total_milliseconds - cap_ticks
 
   # if we finished this frame early, wait until we've reached 60 FPS before continuing
-  sleep(capped_ticks_per_frame - frame_ticks) if frame_ticks < capped_ticks_per_frame
+  while frame_ticks < locked_fps
+    frame_ticks = Time.monotonic.total_milliseconds - cap_ticks
+  end
 end
