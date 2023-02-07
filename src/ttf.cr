@@ -7,7 +7,7 @@ module SDL
     alias Error = SDL::Error
 
     def self.init
-      if LibTTF.was_init == 1
+      if LibTTF.was_init != 0
         return
       end
       unless LibTTF.init == 0
@@ -16,7 +16,7 @@ module SDL
     end
 
     def self.quit
-      LibTTF.quit if LibTTF.was_init == 1
+      LibTTF.quit if LibTTF.was_init != 0
     end
 
     class Font
@@ -99,7 +99,7 @@ module SDL
       end
 
       def face_fixed_width?
-        LibTTF.font_face_is_fixed_width(self) == 1
+        LibTTF.font_face_is_fixed_width(self) != 0
       end
 
       def face_family_name
@@ -115,7 +115,7 @@ module SDL
       end
 
       def glyph_provided?(char : UInt16)
-        LibTTF.glyph_is_provided(self, char) == 1
+        LibTTF.glyph_is_provided(self, char) != 0
       end
 
       record GlyphMetrics,
