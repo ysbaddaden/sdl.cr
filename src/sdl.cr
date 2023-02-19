@@ -21,6 +21,7 @@ require "./renderer"
 require "./window"
 require "./screensaver"
 require "./color"
+require "./gamecontroller"
 
 module SDL
   class Error < Exception
