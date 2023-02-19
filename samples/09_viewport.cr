@@ -4,6 +4,9 @@ require "../src/image"
 SDL.init(SDL::Init::VIDEO)
 at_exit { SDL.quit }
 
+SDL::IMG.init(SDL::IMG::Init::PNG)
+at_exit { SDL::IMG.quit }
+
 window = SDL::Window.new("SDL tutorial", 640, 480)
 renderer = SDL::Renderer.new(window)
 
@@ -17,7 +20,7 @@ loop do
   end
 
   # clear sreen in white
-  renderer.draw_color = SDL::Color[255, 255, 0, 255]
+  renderer.draw_color = SDL::Color[255, 255, 255, 255]
   renderer.clear
 
   # top left

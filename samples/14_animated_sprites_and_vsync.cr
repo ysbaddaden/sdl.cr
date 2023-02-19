@@ -8,9 +8,11 @@ width, height = 640, 480
 window = SDL::Window.new("SDL tutorial", 640, 480)
 renderer = SDL::Renderer.new(window, SDL::Renderer::Flags::ACCELERATED | SDL::Renderer::Flags::PRESENTVSYNC)
 
-sprite = SDL::IMG.load(File.join(__DIR__, "data", "foo_sprite.png"), renderer)
+sprite = SDL::IMG.load(File.join(__DIR__, "data", "foo_sprite.png"))
+sprite.color_key = {0, 255, 255}
+sprite_texture = SDL::Texture.from(sprite, renderer)
 sprite_clips = StaticArray(SDL::Rect, 4).new do |i|
-  SDL::Rect.new(i * 64, 0, 64, 305)
+  SDL::Rect.new(i * 64, 0, 64, 205)
 end
 
 frame = 0
@@ -25,10 +27,10 @@ loop do
   renderer.draw_color = SDL::Color[255, 255, 255, 255]
   renderer.clear
 
-  current_clip = sprite_clips[frame / slowdown]
-  x = (window.width - current_clip.w) / 2
-  y = (window.height - current_clip.h) / 2
-  renderer.copy(sprite, current_clip, SDL::Rect[x, y, current_clip.w, current_clip.h])
+  current_clip = sprite_clips[frame // slowdown]
+  x = (window.width - current_clip.w) // 2
+  y = (window.height - current_clip.h) // 2
+  renderer.copy(sprite_texture, current_clip, SDL::Rect[x, y, current_clip.w, current_clip.h])
 
   renderer.present
 
