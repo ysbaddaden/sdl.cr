@@ -21,6 +21,7 @@ require "./renderer"
 require "./window"
 require "./screensaver"
 require "./color"
+require "./timer"
 
 module SDL
   class Error < Exception
