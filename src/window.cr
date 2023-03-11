@@ -5,18 +5,29 @@ module SDL
     alias Flags = LibSDL::WindowFlags
     alias Position = LibSDL::WindowPosition
 
-    getter width : Int32
-    getter height : Int32
-
-    def initialize(title, @width, @height,
+    def initialize(title, width, height,
                    x : Position = Position::UNDEFINED,
                    y : Position = Position::UNDEFINED,
                    flags : Flags = Flags::SHOWN)
-      @window = LibSDL.create_window(title, x, y, @width, @height, flags)
+      @window = LibSDL.create_window(title, x, y, width, height, flags)
     end
 
     def finalize
       LibSDL.destroy_window(self)
+    end
+
+    # Get the window's current width and height
+    def size : Tuple(Int32, Int32)
+      LibSDL.get_window_size(@window, out w, out h)
+      {w, h}
+    end
+
+    def width : Int32
+      size[0]
+    end
+
+    def height : Int32
+      size[1]
     end
 
     def surface
@@ -71,8 +82,8 @@ module SDL
     {% end %}
 
     enum Fullscreen
-      WINDOW = 0
-      FULLSCREEN = LibSDL::WindowFlags::FULLSCREEN
+      WINDOW             = 0
+      FULLSCREEN         = LibSDL::WindowFlags::FULLSCREEN
       FULLSCREEN_DESKTOP = LibSDL::WindowFlags::FULLSCREEN_DESKTOP
     end
 

@@ -116,4 +116,9 @@ lib LibSDL
 
   fun close_audio = SDL_CloseAudio
   fun close_audio = SDL_CloseAudioDevice(dev : AudioDeviceID)
+
+  fun queue_audio = SDL_QueueAudio(dev : AudioDeviceID, data : Void*, len : UInt32) : Int
+  fun dequeue_audio = SDL_DequeueAudio(dev : AudioDeviceID, data : Void*, len : UInt32) : UInt32
+  fun get_queued_audio_size = SDL_GetQueuedAudioSize(dev : AudioDeviceID) : UInt32
+  fun clear_queued_audio = SDL_ClearQueuedAudio(dev : AudioDeviceID)
 end
