@@ -30,7 +30,7 @@ loop do
 
   x = (window.width - arrow.width) / 2
   y = (window.height - arrow.height) / 2
-  renderer.copy(arrow, dstrect: SDL::Rect[x, y, arrow.width, arrow.height], angle: degrees, flip: flip)
+  renderer.copy(arrow, dstrect: SDL::Rect[x.to_i, y.to_i, arrow.width, arrow.height], angle: degrees, flip: flip)
 
   renderer.present
 end
