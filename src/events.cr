@@ -1,3 +1,9 @@
+enum ::LibSDL::EventType
+  def self.register(n)
+    new LibSDL.register_events(n)
+  end
+end
+
 module SDL
   abstract struct Event
     alias Type = LibSDL::EventType
@@ -279,7 +285,15 @@ module SDL
         @event.user
       end
 
-      delegate code, data1, data2, to: _event
+      delegate type, :type=, code, :code=, data1, :data1=, data2, :data2=, to: _event
+
+      def initialize(type : Type = Type::USER_EVENT, *, code = 0, data1 = nil, data2 = nil)
+        @event = LibSDL::Event.new
+        @event.type = type
+        @event.user.code = code
+        @event.user.data1 = data1
+        @event.user.data2 = data2
+      end
 
       def window_id
         _event.windowID
