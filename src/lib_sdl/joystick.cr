@@ -25,6 +25,7 @@ lib LibSDL
   fun joystick_get_guid_string = SDL_JoystickGetGUIDString(guid : JoystickGUID, pszGUID : Char*, cbGUID : Int)
   fun joystick_get_guid_rom_string = SDL_JoystickGetGUIDFromString(pchGuid : Char*)
   fun joystick_get_attached = SDL_JoystickGetAttached(joystick : Joystick*) : Bool
+  fun joystick_get_device_instance_id = SDL_JoystickGetDeviceInstanceID(device_index : Int) : JoystickID
   fun joystick_instance_id = SDL_JoystickInstanceID(joystick : Joystick*) : JoystickID
   fun joystick_num_axes = SDL_JoystickNumAxes(joystick : Joystick*) : Int
   fun joystick_num_balls = SDL_JoystickNumBalls(joystick : Joystick*) : Int
