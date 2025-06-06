@@ -9,10 +9,11 @@ renderer = SDL::Renderer.new(window)
 
 background = SDL::IMG.load(File.join(__DIR__, "data", "fadein.png"), renderer)
 modulated = SDL::IMG.load(File.join(__DIR__, "data", "fadeout.png"), renderer)
+modulated.blend_mode = SDL::BlendMode::BLEND
 a = 255
 
 loop do
-  case event = SDL::Event.wait
+  case event = SDL::Event.poll
   when SDL::Event::Quit
     break
   when SDL::Event::Keyboard
