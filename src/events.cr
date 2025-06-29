@@ -287,6 +287,9 @@ module SDL
 
       delegate type, :type=, code, :code=, data1, :data1=, data2, :data2=, to: _event
 
+      def initialize(@event : LibSDL::Event)
+      end
+
       def initialize(type : Type = Type::USER_EVENT, *, code = 0, data1 = nil, data2 = nil)
         @event = LibSDL::Event.new
         @event.type = type
